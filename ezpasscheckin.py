@@ -36,5 +36,5 @@ USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 URL = "https://www.ezpassmd.com/vector/violations/violNoticeInquiry.do?locale=en_US&from=Home"
 
 
-req = requests.request(URL, headers={"User-Agent' : USER_AGENT})
-token = find_token
+page_resp = requests.request(URL, headers={"User-Agent' : USER_AGENT})
+token = find_token(page_resp)
