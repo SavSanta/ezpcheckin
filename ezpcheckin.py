@@ -3,7 +3,7 @@
 import requests, bs4, base64
 from random import randint
 
-def search_violations(format, soup):
+def search_violations(format):
     ''' Preps data out to be sent in POST url form submission'''
 
     basedata = {
@@ -14,7 +14,18 @@ def search_violations(format, soup):
         ctokenElem: formtoken,
        }
 
+    basedata.append()
+
     return data
+
+
+def conv_format(data):
+    ''' Convert the data from configuration list into values to  use in search violation. '''
+
+    _ = data.split("||")
+    chunks = [x.strip() for x in _ ]
+
+    
 
 
 def get_errflash(soup)"
