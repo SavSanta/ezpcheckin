@@ -4,7 +4,7 @@ import requests, bs4, base64
 from random import randint
 
 
-def search_violations(format, goop):
+def search_violations(format, soup):
     ''' Preps data out to be sent in POST url form submission"
 
     basedata = {
@@ -42,4 +42,5 @@ URL = base64.decodestring(b"aHR0cHM6Ly93d3cuZXpwYXNzbWQuY29tL3ZlY3Rvci92aW9sYXRp
 
 page_resp = requests.request(URL, headers={"User-Agent' : USER_AGENT})
 formtoken = find_token(page_resp)
+
 
