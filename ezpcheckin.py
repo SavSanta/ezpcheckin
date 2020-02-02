@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import requests, bs4
+import requests, bs4, base64
 from random import randint
 
 
@@ -33,8 +33,7 @@ def find_token(soup):
 
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/79.0.3945.79 Chrome/79.0.3945.79 Safari/537.36"
-URL = "https://www.ezpassmd.com/vector/violations/violNoticeInquiry.do?locale=en_US&from=Home"
-
+URL = base64.decodestring(b"aHR0cHM6Ly93d3cuZXpwYXNzbWQuY29tL3ZlY3Rvci92aW9sYXRpb25zL3Zpb2xOb3RpY2VJbnF1aXJ5LmRvP2xvY2FsZT1lbl9VUyZmcm9tPUhvbWU=")
 
 page_resp = requests.request(URL, headers={"User-Agent' : USER_AGENT})
 token = find_token(page_resp)
