@@ -3,6 +3,10 @@
 import requests, bs4, base64
 from random import randint
 
+def check_resp(content):
+    pass
+
+
 def search_violations(format):
     ''' Preps data out to be sent in POST url form submission'''
 
