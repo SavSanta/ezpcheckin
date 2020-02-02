@@ -7,7 +7,7 @@ def check_resp(content):
     pass
 
 
-def search_violations(cfgdata):
+def search_violation(cfgdata):
     ''' Preps data out to be sent in POST url form submission'''
 
     basedata = {
@@ -63,13 +63,14 @@ def get_errflash(soup)"
 
 def find_token(req):
 
-
     soup = bs4.BeautifulSoup(req.text)
     try:
         token = soup.form.input.attrs['value']
         return token
     except Exception as e:
         pass
+
+
 
 
 # CREATE LOGGER DECORATOR HERE
@@ -85,4 +86,10 @@ page_resp = requests.request(URL, headers={"User-Agent' : USER_AGENT})
 
 formtoken = find_token(page_resp)
 
+from ezconfig import lookup
 
+for item in lookup:
+
+    page_resp = search_violation(convcfg(item))
+    # check_resp call
+    # send email
