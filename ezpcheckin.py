@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import requests, bs4, base64
+from ezconfig import lookup
 from random import randint
 
 def check_resp(content):
@@ -71,6 +72,9 @@ def find_token(req):
         pass
 
 
+def dispatchemail(item):
+    pass
+
 
 
 # CREATE LOGGER DECORATOR HERE
@@ -86,10 +90,11 @@ page_resp = requests.request(URL, headers={"User-Agent' : USER_AGENT})
 
 formtoken = find_token(page_resp)
 
-from ezconfig import lookup
-
 for item in lookup:
 
+    print("Checking config for --> {}".format(item)) 
     page_resp = search_violation(convcfg(item))
     # check_resp call
-    # send email
+    # Retrieve the number of billables
+    # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
+    dispatchemail(item, page_resp)
