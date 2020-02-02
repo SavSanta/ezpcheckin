@@ -22,10 +22,22 @@ def search_violations(format):
 def conv_format(data):
     ''' Convert the data from configuration list into values to  use in search violation. '''
 
-    _ = data.split("||")
-    chunks = [x.strip() for x in _ ]
+    d = {}
 
-    
+    # Separate the values on the config line
+    chunks = [ x.strip() for x in data.split("||") ]
+
+    if chunks[0] == 'PLATE':
+
+    elif chunks[0] == 'ADDRESS':
+
+    elif chunks[0] == 'DEVICE':
+
+    elif chunks[0] == 'LICENSE':
+
+    else:
+        raise Exception("Error While Reading Configuration!")
+
 
 
 def get_errflash(soup)"
