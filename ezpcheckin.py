@@ -3,9 +3,8 @@
 import requests, bs4, base64
 from random import randint
 
-
 def search_violations(format, soup):
-    ''' Preps data out to be sent in POST url form submission"
+    ''' Preps data out to be sent in POST url form submission'''
 
     basedata = {
         org.apache.struts.taglib.html.TOKEN: formtoken,
@@ -14,7 +13,6 @@ def search_violations(format, soup):
         btnSearch.y: randint(0,18),
         ctokenElem: formtoken,
        }
-
 
     return data
 
