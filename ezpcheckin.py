@@ -7,7 +7,7 @@ def check_resp(content):
     pass
 
 
-def search_violations(format):
+def search_violations(cfgdata):
     ''' Preps data out to be sent in POST url form submission'''
 
     basedata = {
@@ -18,9 +18,10 @@ def search_violations(format):
         ctokenElem: formtoken,
        }
 
-    basedata.append()
+    basedata.append(cfgdata)
+    resp = requests.requests(URL, data=basedata)
 
-    return data
+    return resp
 
 
 def convcfg(data):
@@ -49,14 +50,21 @@ def convcfg(data):
         raise Exception("Error While Reading Configuration!")
 
 
-
 def get_errflash(soup)"
+    ''' Retrieve the error box flash alert content '''
 
-    return soup.form.div.table.tbody.td.table.tr.td.table.td.next.next.next.text
+    errflash = soup.form.div.table.tbody.td.table.tr.td.table.td.next.next.next.text
+
+    if errflash:
+        return errflash
+    else:
+        return False
 
 
-def find_token(soup):
+def find_token(req):
 
+
+    soup = bs4.BeautifulSoup(req.text)
     try:
         token = soup.form.input.attrs['value']
         return token
@@ -72,6 +80,9 @@ USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 URL = base64.decodestring(b"aHR0cHM6Ly93d3cuZXpwYXNzbWQuY29tL3ZlY3Rvci92aW9sYXRpb25zL3Zpb2xOb3RpY2VJbnF1aXJ5LmRvP2xvY2FsZT1lbl9VUyZmcm9tPUhvbWU=")
 
 page_resp = requests.request(URL, headers={"User-Agent' : USER_AGENT})
+
+# if check_resp call
+
 formtoken = find_token(page_resp)
 
 
