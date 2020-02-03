@@ -1,11 +1,30 @@
 #!/usr/bin/env python3
 
-import requests, bs4, base64
+import requests, bs4, base64, functools
 from ezconfig import lookup
 from random import randint
 
 def check_resp(content):
     pass
+
+
+def exceptmail(function):
+    ''' Decorator that wraps and emails caught exceptions '''
+    @functools.wraps(function)
+    def wrapper(*args, **kwargs):
+        try:
+            # try to run fumoction
+            return function(*args, **kwargs)
+        except:
+            # email the exception
+            err = "Error: Exception in "
+            err += function.__name__
+            print(err)
+            dispatchemail(err)
+            raise
+    return wrapper
+
+
 
 
 def search_violation(cfgdata):
@@ -76,8 +95,6 @@ def dispatchemail(item):
     pass
 
 
-
-# CREATE LOGGER DECORATOR HERE
 
 # CREATE REQUESTS.REQUEST DECORATOR HERE (NO IM NOT USING SESSION)
 
