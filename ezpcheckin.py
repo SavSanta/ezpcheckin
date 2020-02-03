@@ -11,6 +11,14 @@ def check_resp(content):
     pass
 
 
+def readstore(config="ezpstore.txt"):
+''' Reads the lines for the EZPass accounts to check and returns as a list variable '''
+
+    with open(config) as lookup:
+        items = lookup.readlines()
+        return items
+
+
 def request(*args, **kwargs):
     ''' Shadows over the requests.Request function just to provide consistent header '''
 
@@ -110,16 +118,15 @@ page_resp = request('GET', URL)
 # if check_resp call
 
 formtoken = find_token(page_resp)
+items = readstore()
 
-with open("ezconfig.txt") as lookup:
-    for item in lookup.readlines():
-
-        print("Checking config for --> {}".format(item)) 
-        page_resp = search_violation(convcfg(item))
-        # check_resp call
-        # Retrieve the number of billables
-        # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
-        dispatchemail(item, page_resp)
+for item in items:
+    print("Checking config for --> {}".format(item)) 
+    page_resp = search_violation(convcfg(item))
+   # check_resp call
+   # Retrieve the number of billables
+   # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
+    dispatchemail(item, page_resp)
 
 
 print("Script Ended.")
