@@ -42,15 +42,15 @@ def search_violation(cfgdata):
     ''' Preps data out to be sent in POST url form submission'''
 
     basedata = {
-        org.apache.struts.taglib.html.TOKEN: formtoken,
-        formid: frmViolationInquiry,
-        btnSearch.x: randint(0,70),
-        btnSearch.y: randint(0,18),
-        ctokenElem: formtoken,
+        'org.apache.struts.taglib.html.TOKEN': formtoken,
+        'formid': frmViolationInquiry,
+        'btnSearch.x': randint(0,70),
+        'btnSearch.y': randint(0,18),
+        'ctokenElem': formtoken,
        }
 
     basedata.append(cfgdata)
-    resp = requests.requests(URL, data=basedata)
+    resp = request('GET', URL, data=basedata)
 
     return resp
 
