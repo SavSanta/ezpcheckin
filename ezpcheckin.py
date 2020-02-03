@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import requests, bs4, base64, functools
-from ezconfig import lookup
 from random import randint
 
 # Define constants
@@ -16,7 +15,7 @@ def request(*args, **kwargs):
     ''' Shadows over the requests.Request function just to provide consistent header '''
 
     USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/79.0.3945.79 Chrome/79.0.3945.79 Safari/537.36"
-    headers = {"User-Agent" : USER_AGENT}
+    headers = {'User-Agent' : USER_AGENT}
 
     requests.request(*args, **kwargs, headers=headers)
 
@@ -112,11 +111,15 @@ page_resp = request('GET', URL)
 
 formtoken = find_token(page_resp)
 
-for item in lookup:
+with open("ezconfig.txt") as lookup:
+    for item in lookup.readlines():
 
-    print("Checking config for --> {}".format(item)) 
-    page_resp = search_violation(convcfg(item))
-    # check_resp call
-    # Retrieve the number of billables
-    # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
-    dispatchemail(item, page_resp)
+        print("Checking config for --> {}".format(item)) 
+        page_resp = search_violation(convcfg(item))
+        # check_resp call
+        # Retrieve the number of billables
+        # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
+        dispatchemail(item, page_resp)
+
+
+print("Script Ended.")
