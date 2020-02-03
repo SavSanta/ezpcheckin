@@ -4,6 +4,10 @@ import requests, bs4, base64, functools
 from ezconfig import lookup
 from random import randint
 
+# Define constants
+URL = base64.decodestring(b"aHR0cHM6Ly93d3cuZXpwYXNzbWQuY29tL3ZlY3Rvci92aW9sYXRpb25zL3Zpb2xOb3RpY2VJbnF1aXJ5LmRvP2xvY2FsZT1lbl9VUyZmcm9tPUhvbWU=")
+
+
 def check_resp(content):
     pass
 
@@ -102,7 +106,6 @@ def dispatchemail(item):
     pass
 
 
-URL = base64.decodestring(b"aHR0cHM6Ly93d3cuZXpwYXNzbWQuY29tL3ZlY3Rvci92aW9sYXRpb25zL3Zpb2xOb3RpY2VJbnF1aXJ5LmRvP2xvY2FsZT1lbl9VUyZmcm9tPUhvbWU=")
 page_resp = request('GET', URL)
 
 # if check_resp call
