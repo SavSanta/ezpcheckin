@@ -88,7 +88,7 @@ def convcfg(data):
         raise Exception("Error While Reading Configuration!")
 
 
-def get_errflash(soup)"
+def get_errflash(soup):
     ''' Retrieve the error box flash alert content '''
 
     errflash = soup.form.div.table.tbody.td.table.tr.td.table.td.next.next.next.text
