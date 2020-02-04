@@ -74,16 +74,16 @@ def convcfg(data):
     if chunks[0] == 'PLATE':
         # Example values to populate
         # loginNumber = 2DLXEFM or S123456789 or 555 Santa Claus Street | licenstate = MD | zipcode = 47450
-        d.update({'loginType': 'plate', 'selectCreditCard':'new', 'loginNumber':chunks[1] , 'zipCode':chunks[2], 'licenseState':chunks[3]})
+        d.update({'loginType': 'plate', 'selectCreditCard':'new', 'loginNumber':chunks[1] , 'licenseState':chunks[2], 'zipCode':chunks[3]})
         return d
     elif chunks[0] == 'MAIL':
-        d.update({'loginType': 'violation', 'loginNumber':chunks[1], 'zipCode':chunks[2]})
+        d.update({'loginType': 'violation', 'loginNumber':chunks[1], 'zipCode':chunks[3]})
         return d
     elif chunks[0] == 'DEVICE':
-        d.update({'loginType': 'transponder', 'loginNumber':chunks[1], 'zipCode':chunks[2]})
+        d.update({'loginType': 'transponder', 'loginNumber':chunks[1], 'zipCode':chunks[3]})
         return d
     elif chunks[0] == 'LIC':
-        d.update({'loginType': 'license', 'loginNumber':chunks[1] , 'zipCode':chunks[2], 'licenseState':chunks[3]})
+        d.update({'loginType': 'license', 'loginNumber':chunks[1] , 'licenseState':chunks[2], 'zipCode':chunks[3]})
         return d
     else:
         raise Exception("Error While Reading Configuration!! Check for blank lines or incorrect line structure!")
