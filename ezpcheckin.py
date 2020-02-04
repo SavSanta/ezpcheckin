@@ -76,7 +76,7 @@ def convcfg(data):
         # loginNumber = 2DLXEFM or S123456789 or 555 Santa Claus Street | licenstate = MD | zipcode = 47450
         d.update({'loginType': 'plate', 'selectCreditCard':'new', 'loginNumber':chunks[1] , 'zipCode':chunks[2], 'licenseState':chunks[3]})
         return d
-    elif chunks[0] == 'ADDR':
+    elif chunks[0] == 'MAIL':
         d.update({'loginType': 'violation', 'loginNumber':chunks[1], 'zipCode':chunks[2]})
         return d
     elif chunks[0] == 'DEVICE':
