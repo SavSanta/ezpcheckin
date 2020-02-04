@@ -101,7 +101,6 @@ def get_errflash(soup):
 
 
 def find_token(req):
-    import pdb;pdb.set_trace()
     soup = bs4.BeautifulSoup(req.text)
     try:
         token = soup.form.input.attrs['value']
@@ -118,7 +117,6 @@ page_resp = request('GET', URL)
 
 # if check_resp call
 
-import pdb;pdb.set_trace()
 formtoken = find_token(page_resp)
 items = readstore()
 
