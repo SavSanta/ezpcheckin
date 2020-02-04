@@ -121,7 +121,7 @@ formtoken = find_token(page_resp)
 items = readstore()
 
 for item in items:
-    if item.lstrip.startswith('#'):
+    if (item.lstrip.startswith('#')) or (not item):
         continue
     print("Checking config for --> {}".format(item)) 
     page_resp = search_violation(convcfg(item))
