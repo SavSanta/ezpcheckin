@@ -25,7 +25,8 @@ def request(*args, **kwargs):
     USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/79.0.3945.79 Chrome/79.0.3945.79 Safari/537.36"
     headers = {'User-Agent' : USER_AGENT}
 
-    requests.request(*args, **kwargs, headers=headers)
+    resp = requests.request(*args, **kwargs, headers=headers)
+    return resp
 
 
 def exceptmail(function):
@@ -100,7 +101,7 @@ def get_errflash(soup):
 
 
 def find_token(req):
-
+    import pdb;pdb.set_trace()
     soup = bs4.BeautifulSoup(req.text)
     try:
         token = soup.form.input.attrs['value']
@@ -117,6 +118,7 @@ page_resp = request('GET', URL)
 
 # if check_resp call
 
+import pdb;pdb.set_trace()
 formtoken = find_token(page_resp)
 items = readstore()
 
