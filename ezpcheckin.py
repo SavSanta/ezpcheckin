@@ -86,7 +86,7 @@ def convcfg(data):
         d.update({'loginType': 'license', 'loginNumber':chunks[1] , 'zipCode':chunks[2], 'licenseState':chunks[3]})
         return d
     else:
-        raise Exception("Error While Reading Configuration!")
+        raise Exception("Error While Reading Configuration!! Check for blank lines or incorrect line structure!")
 
 
 def get_errflash(soup):
@@ -121,6 +121,8 @@ formtoken = find_token(page_resp)
 items = readstore()
 
 for item in items:
+    if item.lstrip.startswith('#'):
+        continue
     print("Checking config for --> {}".format(item)) 
     page_resp = search_violation(convcfg(item))
    # check_resp call
