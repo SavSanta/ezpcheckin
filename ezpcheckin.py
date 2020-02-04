@@ -12,7 +12,7 @@ def check_resp(content):
 
 
 def readstore(config="ezpstore.txt"):
-''' Reads the lines for the EZPass accounts to check and returns as a list variable '''
+    ''' Reads the lines for the EZPass accounts to check and returns as a list variable '''
 
     with open(config) as lookup:
         items = lookup.readlines()
