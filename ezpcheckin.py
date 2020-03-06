@@ -14,18 +14,18 @@ from random import randint
 URL = base64.decodestring(b"aHR0cHM6Ly93d3cuZXpwYXNzbWQuY29tL3ZlY3Rvci92aW9sYXRpb25zL3Zpb2xOb3RpY2VJbnF1aXJ5LmRvP2xvY2FsZT1lbl9VUyZmcm9tPUhvbWU=")
 
 
-def check_resp(content):
-    if content.status_code == 200:
+def check_resp(webpage):
+    if webpage.status_code == 200:
         print("Response Check returned OK!\n")
         return
-    elif (400 <= content.status_code < 500):
+    elif (400 <= webpage.status_code < 500):
         print("Response Check returned failing 400 series.\n")
         raise Exception("400 Server Error Code. Aborting")
-    elif (500 <= content.status_code < 600):
+    elif (500 <= webpage.status_code < 600):
         print("Response Check returned failing 500 series. Site is having issues.\n")
         raise Exception("500 Server Error Code. Aborting")
     else:
-        print(f"Unknown Error Code: {content.status_code}.\n")
+        print(f"Unknown Error Code: {webpage.status_code}.\n")
         raise Exception("Unknown Response Code. Aborting")
 
 
@@ -60,6 +60,7 @@ def request(*args, **kwargs):
 
 def exceptmail(function):
     ''' Decorator that wraps and emails caught exceptions '''
+
     @functools.wraps(function)
     def wrapper(*args, **kwargs):
         try:
@@ -137,8 +138,10 @@ def get_errflash(content):
         return None
 
 
-def find_token(content):
-    soup = bs4.BeautifulSoup(content.text, features='lxml')
+def find_token(webpage):
+    '''Locate page token for sending requests '''
+
+    soup = bs4.BeautifulSoup(webpage.text, features='lxml')
     try:
         token = soup.form.input.attrs['value']
         return token
@@ -147,7 +150,9 @@ def find_token(content):
 
 
 def get_totals(webpage):
-    soup = bs4.BeautifulSoup(webpage.content, features='lxml')
+    '''Locate toll total charges and number of notices on the page.'''
+
+    soup = bs4.BeautifulSoup(webpage.text, features='lxml')
 
     # Should retrieve spans for Total Amount due and Total Number of Notices
     overall_totals = soup.select("td > span")
@@ -195,8 +200,6 @@ def check_endable(message):
         return False
 
 
-
-
 def get_pdf_page(link):
     # probably should post to /vector/violations/violTransactionList.do?violationNumber=<T082023063482>
     pass
@@ -206,9 +209,10 @@ def dispatchemail(item, content):
     pass
 
 
+
+
 page_resp = request('GET', URL)
 check_resp(page_resp)
-
 formtoken = find_token(page_resp)
 items = readstore()
 
