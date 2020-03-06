@@ -4,7 +4,7 @@
 # Author: Savsanta (Ru Uba)
 # Version: 2.0
 # This script checks for kickback-tolls that may've not been mailed to you in this godforsaken expensive state and country.
-# This progam using f-strings and requires Python 3.6 or greater.
+# This progam uses f-strings and requires Python 3.6 or greater.
 
 
 import requests, bs4, base64, functools
