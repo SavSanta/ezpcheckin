@@ -3,7 +3,7 @@
 # ezpcheckin.py
 # Author: Savsanta (Ru Uba)
 # Version: 2.0
-# This script checks for kickback-tolls that may've not been mailed to you in this godforsaken expensive state and country.
+# This script checks for kickback-tolls that may be (not) mailed to you in this godforsaken expensive state and country.
 # This progam uses f-strings and requires Python 3.6 or greater.
 
 
