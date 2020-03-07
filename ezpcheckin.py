@@ -96,7 +96,7 @@ def search_violation(cfgdata):
 def chunkifyline(data):
     ''' Make a chunked list from a valid line from configuration file. '''
 
-    cfgchunk = namedtuple("TYPE ATOM STATE ZIP EMAIL")
+    cfgchunk = namedtuple("ConfigChunks", "TYPE QUERY STATE ZIP EMAIL")
     splitted = [ x.strip() for x in data.split("||") ]
 
     return cfgchunk(*splitted)
@@ -110,19 +110,19 @@ def convcfg(data):
     # Separate the values on the config line
     searchfor = chunkifyline(data)
 
-    if searchfor[TYPE] == 'PLATE':
+    if searchfor.TYPE == 'PLATE':
         # Example values to populate
         # loginNumber = 2DLXEFM or S123456789 or L7564334578 || licenstate = MD || zipcode = 47450 || my@email.com,mysecond@email.com
-        d.update({'loginType': 'plate', 'selectCreditCard':'new', 'loginNumber':searchfor[ATOM] , 'licenseState':searchfor[STATE], 'zipCode':searchfor[ZIP]})
+        d.update({'loginType': 'plate', 'selectCreditCard':'new', 'loginNumber':searchfor.QUERY , 'licenseState':searchfor.STATE, 'zipCode':searchfor.ZIP})
         return d
-    elif searchfor[TYPE] == 'MAIL':
-        d.update({'loginType': 'violation', 'loginNumber':searchfor[ATOM], 'zipCode':searchfor[ZIP]})
+    elif searchfor.TYPE == 'MAIL':
+        d.update({'loginType': 'violation', 'loginNumber':searchfor.QUERY, 'zipCode':searchfor.ZIP})
         return d
-    elif searchfor[TYPE] == 'DEVICE':
-        d.update({'loginType': 'transponder', 'loginNumber':searchfor[ATOM], 'zipCode':searchfor[ZIP]})
+    elif searchfor.TYPE == 'DEVICE':
+        d.update({'loginType': 'transponder', 'loginNumber':searchfor.QUERY, 'zipCode':searchfor.ZIP})
         return d
-    elif searchfor[TYPE] == 'LIC':
-        d.update({'loginType': 'plate', 'loginNumber':searchfor[ATOM] , 'licenseState':searchfor[STATE], 'zipCode':searchfor[ZIP]})
+    elif searchfor.TYPE == 'LIC':
+        d.update({'loginType': 'plate', 'loginNumber':searchfor.QUERY , 'licenseState':searchfor.STATE, 'zipCode':searchfor.ZIP})
         return d
     else:
         raise Exception("Error while reading configuration file! Check for blank lines or incorrect line structure!")
@@ -204,7 +204,7 @@ def check_endable(message):
     print(f"Error Flash Messagebox Content: {message}")
 
     if message in endable:
-        print("Error Flash Message is designated as endable. ")
+        print("Error Flash Message is designated as endable.")
         return True
     else:
         print("Error Flash Message not designated to be endable. Continuing program execution.")
@@ -217,11 +217,8 @@ def get_pdf_page(link):
 
 
 def dispatchemail(addresslist, *args):
-   '''Dispatches and email to the email address in the list containing the contents '''
-
+#   '''Dispatches and email to the email address in the list containing the contents '''
     pass
-
-
 
 
 page_resp = request('GET', URL)
@@ -243,7 +240,7 @@ for item in items:
         continue
     else:
         amount, bills = get_totals(page_resp)
-        #odispatchemail()
+        #dispatchemail()
 
     # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
     #dispatchemail(item, page_resp)
