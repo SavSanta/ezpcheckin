@@ -103,7 +103,7 @@ def convcfg(data):
 
     if chunks[0] == 'PLATE':
         # Example values to populate
-        # loginNumber = 2DLXEFM or S123456789 or L7564334578 | licenstate = MD | zipcode = 47450
+        # loginNumber = 2DLXEFM or S123456789 or L7564334578 || licenstate = MD || zipcode = 47450 || my@email.com,mysecond@email.com
         d.update({'loginType': 'plate', 'selectCreditCard':'new', 'loginNumber':chunks[1] , 'licenseState':chunks[2], 'zipCode':chunks[3]})
         return d
     elif chunks[0] == 'MAIL':
@@ -168,6 +168,8 @@ def get_totals(webpage):
     print("\t|------  End Totals  ------|")
     print('\n')
 
+    return total_amt, total_bills
+
 
 def check_endable(message):
     ''' Check errflash message against known end-of-operation messages. End program gracefully if required. '''
@@ -205,7 +207,9 @@ def get_pdf_page(link):
     pass
 
 
-def dispatchemail(item, content):
+def dispatchemail(addresslist, *args):
+   '''Dispatches and email to the email address in the list containing the contents '''
+
     pass
 
 
@@ -229,7 +233,8 @@ for item in items:
     if check_endable(message):
         continue
     else:
-        get_totals(page_resp)
+        amount, bills = get_totals(page_resp)
+        dispatchemail()
 
     # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
     #dispatchemail(item, page_resp)
