@@ -98,7 +98,6 @@ def chunkifyline(data):
 
     cfgchunk = namedtuple("ConfigChunks", "TYPE QUERY STATE ZIP EMAIL")
     splitted = [ x.strip() for x in data.split("||") ]
-
     return cfgchunk(*splitted)
 
 
@@ -229,11 +228,13 @@ def dispatchemail(addresslist, *args):
     {args[0]} - {args[1]}.
       - Cheers eMeka
     """
+
+    # Send the email message out.
     server = smtplib.SMTP('127.0.0.1', 25)
-    for addy in addresslist:
+    for addy in addresslist.split(','):
         try:
             server.sendmail("banana@example.com", addy, msg)
-            print("Email to {addy} was successfully dispatched!".format(addy=addy))
+            print(f"Email to {addy} was successfully dispatched!")
 
         except smtplib.SMTPException as e:
             print('SMTP error occurred: ' + str(e))
@@ -260,8 +261,8 @@ for item in items:
     if check_endable(message):
         continue
     else:
-        # pull the target emails from configuration and send messages
-        emaillist = chunkifyline(item)
+        # ull the target emails from configuration and send messages
+        emaillist = (chunkifyline(item)).EMAIL
         amount, bills = get_totals(page_resp)
         dispatchemail(emaillist, amount, bills)
 
