@@ -250,6 +250,7 @@ items = readstore()
 
 for item in items:
 
+    print("==========================")
     print(f"\tChecking config for --> {item} \n")
     page_resp = search_violation(convcfg(item))
 
@@ -259,12 +260,14 @@ for item in items:
 
 
     if check_endable(message):
+        print("==========================")
         continue
     else:
         # ull the target emails from configuration and send messages
         emaillist = (chunkifyline(item)).EMAIL
         amount, bills = get_totals(page_resp)
         dispatchemail(emaillist, amount, bills)
+        print("==========================")
 
     # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
     #dispatchemail(item, page_resp)
