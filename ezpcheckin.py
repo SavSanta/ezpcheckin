@@ -6,7 +6,7 @@
 # This script checks for kickback-tolls that may be (not) mailed to you in this godforsaken expensive state and country.
 # This progam uses f-strings and requires Python 3.6 or greater.
 
-import requests, bs4, base64, functools
+import requests, bs4, base64, functools, smtplib
 from random import randint
 from collections import namedtuple
 
@@ -217,9 +217,30 @@ def get_pdf_page(link):
 
 
 def dispatchemail(addresslist, *args):
-#   '''Dispatches and email to the email address in the list containing the contents '''
-    pass
+    '''Dispatches and email to the email address in the list containing the contents '''
 
+    # Formulate the message!
+    msg = f"""
+    Subject: EZPass Tolls Info
+
+    Hey,
+
+    You might wanna pay those soon!
+    {args[0]} - {args[1]}.
+      - Cheers eMeka
+    """
+    server = smtplib.SMTP('127.0.0.1', 25)
+    for addy in addresslist:
+        try:
+            server.sendmail("banana@example.com", addy, msg)
+            print("Email to {addy} was successfully dispatched!".format(addy=addy))
+
+        except smtplib.SMTPException as e:
+            print('SMTP error occurred: ' + str(e))
+
+
+
+# Main #
 
 page_resp = request('GET', URL)
 check_resp(page_resp)
@@ -239,8 +260,10 @@ for item in items:
     if check_endable(message):
         continue
     else:
+        # pull the target emails from configuration and send messages
+        emaillist = chunkifyline(item)
         amount, bills = get_totals(page_resp)
-        #dispatchemail()
+        dispatchemail(emaillist, amount, bills)
 
     # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
     #dispatchemail(item, page_resp)
@@ -248,3 +271,4 @@ for item in items:
 
 
 print("Script Ended. Godspeed.")
+
