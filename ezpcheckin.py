@@ -6,9 +6,9 @@
 # This script checks for kickback-tolls that may be (not) mailed to you in this godforsaken expensive state and country.
 # This progam uses f-strings and requires Python 3.6 or greater.
 
-
 import requests, bs4, base64, functools
 from random import randint
+from collections import namedtuple
 
 # Define constants
 URL = base64.decodestring(b"aHR0cHM6Ly93d3cuZXpwYXNzbWQuY29tL3ZlY3Rvci92aW9sYXRpb25zL3Zpb2xOb3RpY2VJbnF1aXJ5LmRvP2xvY2FsZT1lbl9VUyZmcm9tPUhvbWU=")
@@ -93,30 +93,39 @@ def search_violation(cfgdata):
     return resp
 
 
+def chunkifyline(data):
+    ''' Make a chunked list from a valid line from configuration file. '''
+
+    cfgchunk = namedtuple("TYPE ATOM STATE ZIP EMAIL")
+    splitted = [ x.strip() for x in data.split("||") ]
+
+    return cfgchunk(*splitted)
+
+
 def convcfg(data):
     ''' Convert the data from configuration list into values to use in the violation search and email dispatching. '''
 
     d = {}
 
     # Separate the values on the config line
-    chunks = [ x.strip() for x in data.split("||") ]
+    searchfor = chunkifyline(data)
 
-    if chunks[0] == 'PLATE':
+    if searchfor[TYPE] == 'PLATE':
         # Example values to populate
         # loginNumber = 2DLXEFM or S123456789 or L7564334578 || licenstate = MD || zipcode = 47450 || my@email.com,mysecond@email.com
-        d.update({'loginType': 'plate', 'selectCreditCard':'new', 'loginNumber':chunks[1] , 'licenseState':chunks[2], 'zipCode':chunks[3]})
+        d.update({'loginType': 'plate', 'selectCreditCard':'new', 'loginNumber':searchfor[ATOM] , 'licenseState':searchfor[STATE], 'zipCode':searchfor[ZIP]})
         return d
-    elif chunks[0] == 'MAIL':
-        d.update({'loginType': 'violation', 'loginNumber':chunks[1], 'zipCode':chunks[3]})
+    elif searchfor[TYPE] == 'MAIL':
+        d.update({'loginType': 'violation', 'loginNumber':searchfor[ATOM], 'zipCode':searchfor[ZIP]})
         return d
-    elif chunks[0] == 'DEVICE':
-        d.update({'loginType': 'transponder', 'loginNumber':chunks[1], 'zipCode':chunks[3]})
+    elif searchfor[TYPE] == 'DEVICE':
+        d.update({'loginType': 'transponder', 'loginNumber':searchfor[ATOM], 'zipCode':searchfor[ZIP]})
         return d
-    elif chunks[0] == 'LIC':
-        d.update({'loginType': 'plate', 'loginNumber':chunks[1] , 'licenseState':chunks[2], 'zipCode':chunks[3]})
+    elif searchfor[TYPE] == 'LIC':
+        d.update({'loginType': 'plate', 'loginNumber':searchfor[ATOM] , 'licenseState':searchfor[STATE], 'zipCode':searchfor[ZIP]})
         return d
     else:
-        raise Exception("Error While Reading Configuration!! Check for blank lines or incorrect line structure!")
+        raise Exception("Error while reading configuration file! Check for blank lines or incorrect line structure!")
 
 
 def get_errflash(content):
@@ -234,7 +243,7 @@ for item in items:
         continue
     else:
         amount, bills = get_totals(page_resp)
-        dispatchemail()
+        #odispatchemail()
 
     # Maybe alternatively setup a page on webserver for viewing for up to 48hrs if BILLABLES exist
     #dispatchemail(item, page_resp)
