@@ -223,7 +223,6 @@ def dispatchemail(addresslist, *args):
     Subject: EZPass Tolls Info
 
     Hey,
-
     You might wanna pay those soon!
     {args[0]} - {args[1]}.
       - Cheers eMeka
@@ -257,7 +256,6 @@ for item in items:
     # Check for an error flash message on the page.
     check_resp(page_resp)
     message = get_errflash(page_resp)
-
 
     if check_endable(message):
         print("==========================")
