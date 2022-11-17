@@ -107,7 +107,7 @@ func SendMail(r *Record) {
     var (
 	    from       = "banana@example.net"
 	    msg        = []byte("Hey, baby I got ya money!")
-	    recipients = []string{"foo@example.com"}
+	    recipients = r.Email
     )
 
      hostname := "mail.example.com"
