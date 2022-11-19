@@ -126,7 +126,7 @@ if debug == true {
     
     }
     
-    fmt.Println("Data Retrieved as JSON: "ls -)
+    fmt.Println("Data Retrieved as JSON: ")
     //fmt.Printf("data-type is %T \n\n %s", data, data)
     jdata := gjson.GetBytes(data, "0.itemDescription")
     fmt.Println(jdata.String())
