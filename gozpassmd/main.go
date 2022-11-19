@@ -10,7 +10,6 @@ import (
 	"math/rand"
 	"github.com/tidwall/gjson"
 	"log"
-	"bufio"
 	"io"
 	"net/smtp"
 
@@ -111,9 +110,6 @@ if debug == false {
     } 
     
 if debug == true {
-
-    // reader := bufio.NewReader(resp.Body)
-    //data , _ := reader.ReadBytes('~')
     
     // Read in sample.json since no current tolls exist
     file, err := os.Open("sample.json")
