@@ -1,6 +1,5 @@
 package main
 
-
 import (
 
 	"os"
@@ -9,12 +8,16 @@ import (
 	"encoding/base64"
 	"net/http"
 	"math/rand"
-//	"github.com/tidwall/gjson"
+	"github.com/tidwall/gjson"
 	"log"
 	"bufio"
+	"io"
 	"net/smtp"
 
 )
+
+
+const debug = true
 
 const QueryAPI string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw=="
 
@@ -83,14 +86,50 @@ func QueryNotice(r *Record) {
 
     // Explicitfy the separators for easier
     QueryURL := string(baseURL) + "0/" + r.Zipcode + "/" + r.Data + "/1/25/"
+    fmt.Println("Target URL", QueryURL)
 
-    fmt.Println("Final built string", QueryURL)
-
-    resp, err := http.Get("https://example.com")
+    var data []byte
+    
+if debug == false {
+    var err error
+    resp, err := http.Get(QueryURL)
     if err != nil {
-        panic(err)
+        log.Fatalf("Error on URL request.", err)
     }
-    defer resp.Body.Close()
+    
+    data , err = io.ReadAll(resp.Body)
+    if err != nil {
+		log.Fatalf("Error on io read. ", err)
+	}
+    
+    if resp.StatusCode > 299 {
+		log.Printf("Response failed with StatusCode: %d\n Body: %s\n\n", resp.StatusCode, data)
+	}
+
+	resp.Body.Close()
+	
+    } 
+    
+if debug == true {
+
+    // reader := bufio.NewReader(resp.Body)
+    //data , _ := reader.ReadBytes('~')
+    
+    // Read in sample.json since no current tolls exist
+    file, err := os.Open("sample.json")
+    defer file.Close()
+    if err != nil {
+        log.Fatal("Failed to open sample.json")
+    }
+    
+    data, err = io.ReadAll(file)
+    
+    }
+    
+    fmt.Println("Data Retrieved as JSON: "ls -)
+    //fmt.Printf("data-type is %T \n\n %s", data, data)
+    jdata := gjson.GetBytes(data, "0.itemDescription")
+    fmt.Println(jdata.String())
 
     return
 }
@@ -129,7 +168,7 @@ func main() {
     file, err := os.Open("ezpstore.txt")
     defer file.Close()
     if err != nil {
-        log.Fatalf("Failed to open ezpstore.txt")
+        log.Fatal("Failed to open ezpstore.txt")
     }
 
     scanner := bufio.NewScanner(file)
