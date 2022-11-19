@@ -16,7 +16,7 @@ import (
 )
 
 
-const debug = true
+const TestDebug = true
 
 const QueryAPI string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw=="
 
@@ -89,7 +89,7 @@ func QueryNotice(r *Record) {
 
     var data []byte
     
-if debug == false {
+if TestDebug == false {
     var err error
     resp, err := http.Get(QueryURL)
     if err != nil {
@@ -107,9 +107,7 @@ if debug == false {
 
 	resp.Body.Close()
 	
-    } 
-    
-if debug == true {
+    } else {
     
     // Read in sample.json since no current tolls exist
     file, err := os.Open("sample.json")
