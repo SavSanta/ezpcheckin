@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"math/rand"
 	"github.com/tidwall/gjson"
+        "bufio"
 	"log"
 	"io"
 	"net/smtp"
