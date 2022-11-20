@@ -125,7 +125,10 @@ if TestDebug == false {
     fmt.Println("Data Retrieved as JSON: ")
 
     message := SearchJSONResponse(data)
-    fmt.Println("New Message Recieved ", *message)
+    if (message != nil) {
+	fmt.Println("New Message Recieved ", *message)
+	SendMail(message, r.Email)
+    }
 
     return
 }
@@ -179,12 +182,12 @@ func MakePayment() {
 }
 
 
-func SendMail(r *Record) {
+func SendMail(message *string, emailto []string) {
 
     var (
 	    from       = "banana@example.net"
 	    msg        = []byte("Hey, baby I got ya money!")
-	    recipients = r.Email
+	    recipients = emailto
     )
 
      hostname := "mail.example.com"
