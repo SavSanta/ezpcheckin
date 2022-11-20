@@ -190,10 +190,16 @@ func SendMail(message *string, emailto []string) {
 	    recipients = emailto
     )
 
+	 msg := []byte("To: " + from + "\r\n" +
+		"Subject: Tolls Due!\r\n" +
+		"\r\n" +
+		 message + "\r\n")
+
+
      hostname := "mail.example.com"
      auth := smtp.PlainAuth("", "user@example.com", "password", hostname)
 
-     err := smtp.SendMail(hostname+":25", auth, from, recipients, msg)
+     err := smtp.SendMail(hostname+":25", auth, from, emailto, msg)
      if err != nil {
         log.Fatal(err)
      }
