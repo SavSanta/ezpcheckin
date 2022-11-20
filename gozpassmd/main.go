@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"math/rand"
 	"github.com/tidwall/gjson"
-        "bufio"
 	"log"
+        "bufio"
 	"io"
 	"net/smtp"
 
@@ -27,7 +27,6 @@ type Record struct {
     State   string
     Zipcode string
     Email   []string
-
 }
 
 
@@ -75,7 +74,7 @@ func QueryNotice(r *Record) {
 
     rand.Intn(100)
     baseURL, _ := base64.StdEncoding.DecodeString(QueryAPI)
-    
+
     /*
     if flags.Debug {
         fmt.Printf("Base URL => %s\n", baseURL)
@@ -89,46 +88,90 @@ func QueryNotice(r *Record) {
     fmt.Println("Target URL", QueryURL)
 
     var data []byte
-    
+
 if TestDebug == false {
     var err error
     resp, err := http.Get(QueryURL)
     if err != nil {
         log.Fatalf("Error on URL request.", err)
     }
-    
+
     data , err = io.ReadAll(resp.Body)
     if err != nil {
 		log.Fatalf("Error on io read. ", err)
 	}
-    
+
     if resp.StatusCode > 299 {
 		log.Printf("Response failed with StatusCode: %d\n Body: %s\n\n", resp.StatusCode, data)
 	}
-
 	resp.Body.Close()
-	
+
     } else {
-    
+
     // Read in sample.json since no current tolls exist
     file, err := os.Open("sample.json")
     defer file.Close()
     if err != nil {
         log.Fatal("Failed to open sample.json")
     }
-    
+
     data, err = io.ReadAll(file)
-    
+
     }
-    
+
+    // Check length of bytes here.
+    // Check number of records
+    // Return nil + send  email as response length mayve changed
     fmt.Println("Data Retrieved as JSON: ")
-    //fmt.Printf("data-type is %T \n\n %s", data, data)
-    jdata := gjson.GetBytes(data, "0.itemDescription")
-    fmt.Println(jdata.String())
+
+    message := SearchJSONResponse(data)
+    fmt.Println("New Message Recieved ", *message)
 
     return
 }
 
+
+func SearchJSONResponse(data []byte) *string {
+
+// OLD Alternative versions of attempting to use GJSON to get values
+/*
+    result := gjson.ParseBytes(data)
+    fmt.Println("The number of notices is ", len(result))
+    result.ForEach(func(key, value gjson.Result) bool {
+        println("key ->", key.String())
+        fmt.Println("val ->", gjson.Get(value.String(), "itemDescription"))
+        fmt.Println("val ->", gjson.Get(value.String(), "formattedTotal"))
+        return true // iterate to the next
+    })
+*/
+/*
+   // discard the first which is the ordinal/key, retain the list(s) in the next
+    for _, b := range results {
+       fmt.Println()
+       fmt.Printf("Len of b:  \n", b.Indexes)
+       //fmt.Printf("Type of b: %T \n", b)
+       //fmt.Println("Explanation of Results -> ", b)
+   }
+*/
+
+   results := gjson.GetManyBytes(data, "#.itemDescription", "#.formattedTotal")
+   last := (len(results[0].Array()) - 1)
+
+
+   if (strings.EqualFold(results[0].Array()[last].String(), "Total Amount Due")) {
+
+      msg := fmt.Sprintf("The %s is %s from %d tolls", results[0].Array()[last].String(), results[1].Array()[last], last+1)
+
+	return &msg
+
+     } else {
+
+	return nil
+
+	}
+
+
+}
 
 func MakePayment() {
 
@@ -173,7 +216,7 @@ func main() {
         if (strings.HasPrefix(line, "#") || len(line) == 0) {
             continue
         }
-        recs = append(recs, CreateRecordFromConfig(line))      
+        recs = append(recs, CreateRecordFromConfig(line))
     }
     fmt.Printf("%d number of Records created.\n\n", len(recs))
 
