@@ -1,3 +1,10 @@
+/* Reccommend build with "go build -tags -netgo"
+ Reference: https://www.arp242.net/static-go.html
+ Reference: https://community.tmpdir.org/t/problem-with-go-binary-portability-lib-x86-64-linux-gnu-libc-so-6-version-glibc-2-32-not-found/123
+
+ Slightly smaller binary go build -ldflags="-w -s"
+*/
+
 package main
 
 import (
@@ -12,6 +19,7 @@ import (
 	"net/smtp"
 	"os"
 	"strings"
+	"time"
 )
 
 const TestDebug = true
@@ -117,7 +125,7 @@ func QueryNotice(r *Record) {
 	// Check number of records
 	// Return nil + send  email as response length mayve changed
 	fmt.Println("Data Retrieved as JSON: ")
-	Time.Sleep(Time.Second * rand.Intn(4))
+	time.Sleep(time.Duration(rand.Intn(4)) * time.Second)
 
 	message := SearchJSONResponse(data)
 	if message != nil {
