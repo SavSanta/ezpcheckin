@@ -67,11 +67,10 @@ func QueryNotice(r *Record) {
 
 	// Currently built only to to use the License plate + zip
 
-	rand.Intn(100)
 	baseURL, _ := base64.StdEncoding.DecodeString(QueryAPI)
 
 	/*
-	   if flags.Debug {
+	   if TestDebug == True {
 	       fmt.Printf("Base URL => %s\n", baseURL)
 	       fmt.Printf("Zipcode is => %q\n", r.Zipcode)
 	       fmt.Printf("License Plate is => %q\n", r.Data)
@@ -183,10 +182,7 @@ func SendMail(message *string, emailto []string) {
 		*message + "\r\n")
 	)
 
-	hostname := "mail.example.com"
-	auth := smtp.PlainAuth("", "user@example.com", "password", hostname)
-
-	err := smtp.SendMail(hostname+":25", auth, from, emailto, msg)
+	err := smtp.SendMail("127.0.0.1:25", nil, from, emailto, msg)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -213,7 +209,7 @@ func main() {
 		}
 		recs = append(recs, CreateRecordFromConfig(line))
 	}
-	fmt.Printf("%d number of Records created.\n\n", len(recs))
+	fmt.Printf("%d num of Records created from config.\n", len(recs))
 
 	// Concurrency and channels. Esp if you make the method a receiver
 	for _, p := range recs {
