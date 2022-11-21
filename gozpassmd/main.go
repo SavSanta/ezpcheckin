@@ -117,6 +117,7 @@ func QueryNotice(r *Record) {
 	// Check number of records
 	// Return nil + send  email as response length mayve changed
 	fmt.Println("Data Retrieved as JSON: ")
+	Time.Sleep(Time.Second * rand.Intn(4))
 
 	message := SearchJSONResponse(data)
 	if message != nil {
