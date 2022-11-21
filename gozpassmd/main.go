@@ -129,7 +129,6 @@ func QueryNotice(r *Record) {
 
 	message := SearchJSONResponse(data)
 	if message != nil {
-		fmt.Println("New Message Recieved ", *message)
 		SendMail(message, r.Email)
 	}
 
@@ -183,12 +182,12 @@ func MakePayment() {
 func SendMail(message *string, emailto []string) {
 
 	var (
-		from       = "banana@example.net"
+		from = "banana@example.net"
 
 		msg = []byte("To: " + from + "\r\n" +
-		"Subject: Tolls Due!\r\n" +
-		"\r\n" +
-		*message + "\r\n")
+			"Subject: Tolls Due!\r\n" +
+			"\r\n" +
+			*message + "\r\n")
 	)
 
 	err := smtp.SendMail("127.0.0.1:25", nil, from, emailto, msg)
@@ -196,6 +195,7 @@ func SendMail(message *string, emailto []string) {
 		log.Fatal(err)
 	}
 
+	fmt.Println("Message Dispatched: ", *message)
 	return
 }
 
