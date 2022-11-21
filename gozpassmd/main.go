@@ -96,15 +96,18 @@ func QueryNotice(r *Record) {
 		resp, err := http.Get(QueryURL)
 		if err != nil {
 			log.Fatalf("Error on URL request.", err)
+			SendErrorMail(err.Error(), r.Email)
 		}
 
 		data, err = io.ReadAll(resp.Body)
 		if err != nil {
 			log.Fatalf("Error on io read. ", err)
+			SendErrorMail(err.Error(), r.Email)
 		}
 
 		if resp.StatusCode > 299 {
 			log.Printf("Response failed with StatusCode: %d\n Body: %s\n\n", resp.StatusCode, data)
+			SendErrorMail(err.Error(), r.Email)
 		}
 		resp.Body.Close()
 
@@ -164,7 +167,7 @@ func SendMail(message *string, emailto []string) {
 		from = "banana@example.net"
 
 		msg = []byte("To: " + from + "\r\n" +
-			"Subject: Tolls Due!\r\n" +
+			"Subject: Tolls Alert!\r\n" +
 			"\r\n" +
 			*message + "\r\n")
 	)
@@ -175,6 +178,26 @@ func SendMail(message *string, emailto []string) {
 	}
 
 	fmt.Println("Message Dispatched: ", *message)
+	return
+}
+
+func SendErrorMail(errmessage string, emailto []string) {
+
+	var (
+		from = "banana@example.net"
+
+		msg = []byte("To: " + from + "\r\n" +
+			"Subject: Tolls Error Issue\r\n" +
+			"\r\n" + "Error Occurred in Script:\n\t" +
+			errmessage + "\r\n")
+	)
+
+	err := smtp.SendMail("127.0.0.1:25", nil, from, emailto, msg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Error Message Email Dispatched: ", errmessage)
 	return
 }
 
