@@ -137,27 +137,6 @@ func QueryNotice(r *Record) {
 
 func SearchJSONResponse(data []byte) *string {
 
-	// OLD Alternative versions of attempting to use GJSON to get values
-	/*
-	   result := gjson.ParseBytes(data)
-	   fmt.Println("The number of notices is ", len(result))
-	   result.ForEach(func(key, value gjson.Result) bool {
-	       println("key ->", key.String())
-	       fmt.Println("val ->", gjson.Get(value.String(), "itemDescription"))
-	       fmt.Println("val ->", gjson.Get(value.String(), "formattedTotal"))
-	       return true // iterate to the next
-	   })
-	*/
-	/*
-	   // discard the first which is the ordinal/key, retain the list(s) in the next
-	    for _, b := range results {
-	       fmt.Println()
-	       fmt.Printf("Len of b:  \n", b.Indexes)
-	       //fmt.Printf("Type of b: %T \n", b)
-	       //fmt.Println("Explanation of Results -> ", b)
-	   }
-	*/
-
 	results := gjson.GetManyBytes(data, "#.itemDescription", "#.formattedTotal")
 	last := (len(results[0].Array()) - 1)
 
