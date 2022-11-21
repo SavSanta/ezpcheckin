@@ -46,7 +46,7 @@ func CreateRecordFromConfig(cfgdata string) *Record {
 			chunks[i] = strings.TrimSpace(chunks[i])
 		}
 	} else {
-		log.Fatal("Configuration file has insufficient chunks.")
+		log.Fatal("config file has insufficient chunks.")
 	}
 
 	/*
