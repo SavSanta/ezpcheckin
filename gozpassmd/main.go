@@ -206,6 +206,14 @@ func SendErrorMail(errmessage string, emailto []string) {
 
 func main() {
 
+	// Rudimentary Debug Mode Flag
+	if os.Args == 2 {
+	    if os.Args[1] == "true" {
+	        TestDebug == true
+	    }
+	}
+
+	time.Sleep(time.Duration(155) * time.Second)
 	recs := make([]*Record, 0)
 
 	file, err := os.Open("ezpstore.txt")
