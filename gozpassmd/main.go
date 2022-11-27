@@ -77,13 +77,13 @@ func QueryNotice(r *Record) {
 
 	baseURL, _ := base64.StdEncoding.DecodeString(QueryAPI)
 
-	/*
-	   if TestDebug == True {
+
+	   if TestDebug == true {
 	       fmt.Printf("Base URL => %s\n", baseURL)
 	       fmt.Printf("Zipcode is => %q\n", r.Zipcode)
 	       fmt.Printf("License Plate is => %q\n", r.Data)
 	   }
-	*/
+
 
 	// Explicitfy the separators for easier
 	QueryURL := string(baseURL) + "0/" + r.Zipcode + "/" + r.Data + "/1/25/"
@@ -116,6 +116,8 @@ func QueryNotice(r *Record) {
 
 	} else {
 
+		log.Println("Utilizing local sample.json file")
+
 		// Read in sample.json since no current tolls exist
 		file, err := os.Open("sample.json")
 		defer file.Close()
@@ -124,13 +126,13 @@ func QueryNotice(r *Record) {
 		}
 
 		data, err = io.ReadAll(file)
+                fmt.Println("Data JSON read.", data)
 
 	}
 
 	// Check length of bytes here.
 	// Check number of records
 	// Return nil + send  email as response length mayve changed
-	fmt.Println("Data Retrieved as JSON: ")
 	time.Sleep(time.Duration(rand.Intn(4)) * time.Second)
 
 	message := SearchJSONResponse(data)
