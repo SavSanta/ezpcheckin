@@ -22,7 +22,7 @@ import (
 	"time"
 )
 
-var TestDebug bool = true
+var TestDebug bool = false
 
 const QueryAPI string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw=="
 
@@ -91,6 +91,8 @@ func QueryNotice(r *Record) {
 
 	var data []byte
 
+
+	// If we're not in Test Mode then dont look for a sample.json file
 	if TestDebug == false {
 		var err error
 		resp, err := http.Get(QueryURL)
