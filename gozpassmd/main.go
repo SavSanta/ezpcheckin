@@ -22,7 +22,7 @@ import (
 	"time"
 )
 
-const TestDebug = true
+var TestDebug bool = true
 
 const QueryAPI string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw=="
 
