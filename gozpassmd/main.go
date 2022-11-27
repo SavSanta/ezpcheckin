@@ -109,7 +109,7 @@ func QueryNotice(r *Record) {
 		if resp.StatusCode > 299 {
 			// local 'err' created as 'err' is nil as we do get a Response if it reaches here and will segfault
 			err := fmt.Errorf("Response failed with StatusCode: %d\n Body: %s\n\n", resp.StatusCode, data)
-			log.Printf(err.Error())
+			log.Println(err.Error())
 			SendErrorMail(err.Error(), r.Email)
 		}
 		resp.Body.Close()
@@ -207,9 +207,9 @@ func SendErrorMail(errmessage string, emailto []string) {
 func main() {
 
 	// Rudimentary Debug Mode Flag
-	if os.Args == 2 {
+	if len(os.Args) == 2 {
 	    if os.Args[1] == "true" {
-	        TestDebug == true
+	        TestDebug = true
 	    }
 	}
 
