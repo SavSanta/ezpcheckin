@@ -213,7 +213,6 @@ func main() {
 	    }
 	}
 
-	time.Sleep(time.Duration(155) * time.Second)
 	recs := make([]*Record, 0)
 
 	file, err := os.Open("ezpstore.txt")
