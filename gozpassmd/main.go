@@ -127,7 +127,7 @@ func QueryNotice(r *Record) {
 		}
 
 		data, err = io.ReadAll(file)
-                fmt.Println("Data JSON read.", data)
+                fmt.Printf("Data JSON read:", string(data))
 
 	}
 
