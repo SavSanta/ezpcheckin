@@ -149,7 +149,11 @@ func SearchJSONResponse(data []byte) *string {
 	results := gjson.GetManyBytes(data, "#.itemDescription", "#.formattedTotal")
 	last := (len(results[0].Array()) - 1)
 
-	if strings.EqualFold(results[0].Array()[last].String(), "Total Amount Due") {
+	// When the value of last will be -1 (0 find minus 1) and cause a bounds fail
+	//  Possibly eedesign later we already catch non-200 errors above and SendErrMail
+	// Though need to be malleable for unknown JSON changes in the future
+
+	if (last != -1) && (strings.EqualFold(results[0].Array()[last].String(), "Total Amount Due")) {
 
 		msg := fmt.Sprintf("The %s is %s from %d tolls", results[0].Array()[last].String(), results[1].Array()[last], last+1)
 
