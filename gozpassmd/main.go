@@ -23,7 +23,7 @@ import (
 	"time"
 )
 
-var TestDebug bool = false
+var TestDebug, NoMail bool = false
 
 const QueryAPI string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw=="
 
@@ -193,6 +193,7 @@ func SendMail(message *string, emailto []string) {
 
 func SendErrorMail(errmessage string, emailto []string) {
 
+        if NoMail { return }
 	var (
 		from = "banana@example.net"
 
@@ -217,6 +218,8 @@ func main() {
 	if len(os.Args) == 2 {
 	    if os.Args[1] == "true" {
 	        TestDebug = true
+	    } else if os.Args[1] == "-nomail" {
+	        NoMail = true
 	    }
 	}
 
