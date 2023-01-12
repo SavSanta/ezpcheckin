@@ -23,7 +23,7 @@ import (
 	"time"
 )
 
-var TestDebug, NoMail bool = false
+var TestDebug, NoMail bool = false, false
 
 const QueryAPI string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw=="
 
