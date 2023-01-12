@@ -215,8 +215,10 @@ func SendErrorMail(errmessage string, emailto []string) {
 func main() {
 
 	// Rudimentary Debug Mode Flag
-	if len(os.Args) == 2 {
-	    if os.Args[1] == "true" {
+        println("syntax: gozpassmd [-testdebug] - run in debugmode with sample.json gozpassmd -nomail")
+        println("syntax: gozpassmd [-nomail] - run normal but dont send emails")
+        if len(os.Args) == 2 {
+              if os.Args[1] == "-testdebug" {
 	        TestDebug = true
 	    } else if os.Args[1] == "-nomail" {
 	        NoMail = true
