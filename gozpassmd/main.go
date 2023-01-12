@@ -1,4 +1,4 @@
-/* Reccommend build with "go build -tags -netgo"
+/* Recommended build with "go build -tags -netgo"
  Reference: https://www.arp242.net/static-go.html
  Reference: https://community.tmpdir.org/t/problem-with-go-binary-portability-lib-x86-64-linux-gnu-libc-so-6-version-glibc-2-32-not-found/123
 
