@@ -1,4 +1,4 @@
-/* Recommended build with "go build -tags -netgo"
+/* Reccommend build with "go build -tags -netgo"
  Reference: https://www.arp242.net/static-go.html
  Reference: https://community.tmpdir.org/t/problem-with-go-binary-portability-lib-x86-64-linux-gnu-libc-so-6-version-glibc-2-32-not-found/123
 
@@ -157,6 +157,9 @@ func SearchJSONResponse(data []byte) *string {
 
 		msg := fmt.Sprintf("The %s is %s from %d tolls", results[0].Array()[last].String(), results[1].Array()[last], last+1)
 
+                // Add support for "-nomail" flag to print to standard output
+                println(msg)
+
 		return &msg
 
 	} else {
@@ -193,6 +196,7 @@ func SendMail(message *string, emailto []string) {
 
 func SendErrorMail(errmessage string, emailto []string) {
 
+        println("The '-nomail' flag is set to ->", NoMail)
         if NoMail { return }
 	var (
 		from = "banana@example.net"
@@ -215,10 +219,10 @@ func SendErrorMail(errmessage string, emailto []string) {
 func main() {
 
 	// Rudimentary Debug Mode Flag
-        println("syntax: gozpassmd [-testdebug] - run in debugmode with sample.json gozpassmd -nomail")
-        println("syntax: gozpassmd [-nomail] - run normal but dont send emails")
-        if len(os.Args) == 2 {
-              if os.Args[1] == "-testdebug" {
+	println("syntax: gozpassmd [-testdebug] - run in debugmode with sample.json gozpassmd -nomail")
+	println("syntax: gozpassmd [-nomail] - run normal but dont send emails")
+	if len(os.Args) == 2 {
+	    if os.Args[1] == "-testdebug" {
 	        TestDebug = true
 	    } else if os.Args[1] == "-nomail" {
 	        NoMail = true
