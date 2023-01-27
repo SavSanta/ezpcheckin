@@ -1,4 +1,5 @@
-/* Reccommend build with "go build -tags -netgo"
+/* Reccommend  build with cgo disabled via env var CGO_ENABLED=0 if mismatched glibc or 
+ Recommend build with "go build -tags -netgo"
  Reference: https://www.arp242.net/static-go.html
  Reference: https://community.tmpdir.org/t/problem-with-go-binary-portability-lib-x86-64-linux-gnu-libc-so-6-version-glibc-2-32-not-found/123
 
@@ -108,7 +109,7 @@ func QueryNotice(r *Record) {
 		}
 
 		if resp.StatusCode > 299 {
-			// local 'err' created as 'err' is nil as we do get a Response if it reaches here and will segfault
+			// local 'err' created as 'err' is nil as we do get a Valid Bad Response if it reaches here and will segfault
 			err := fmt.Errorf("Response failed with StatusCode: %d\n Body: %s\n\n", resp.StatusCode, data)
 			log.Println(err.Error())
 			SendErrorMail(err.Error(), r.Email)
@@ -246,7 +247,7 @@ func main() {
 		}
 		recs = append(recs, CreateRecordFromConfig(line))
 	}
-	fmt.Printf("%d num of Records created from config.\n", len(recs))
+	fmt.Printf("%d num of Records ingested from config.\n", len(recs))
 
 	// Concurrency and channels. Esp if you make the method a receiver
 	for _, p := range recs {
