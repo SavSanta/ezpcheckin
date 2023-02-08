@@ -87,13 +87,13 @@ func QueryNotice(r *Record) {
 	   }
 
 
-	// Explicitfy the separators for easier
+	// Explicitfy the separators for ease
 	QueryURL := string(baseURL) + "0/" + r.Zipcode + "/" + r.Data + "/1/25/"
 	fmt.Println("Target URL", QueryURL)
 
 	var data []byte
 
-	// If we're not in Test Mode then dont look for a sample.json file
+	// If we're not in TestDebug mode then dont look for a sample.json file
 	if TestDebug == false {
 		var err error
 		resp, err := http.Get(QueryURL)
@@ -134,7 +134,7 @@ func QueryNotice(r *Record) {
 
 	// Check length of bytes here.
 	// Check number of records
-	// Return nil + send  email as response length mayve changed
+	// Return nil + send email as response length mayve changed
 	time.Sleep(time.Duration(rand.Intn(4)) * time.Second)
 
 	message := SearchJSONResponse(data)
@@ -151,8 +151,8 @@ func SearchJSONResponse(data []byte) *string {
 	last := (len(results[0].Array()) - 1)
 
 	// When the value of last will be -1 (0 find minus 1) and cause a bounds fail
-	//  Possibly eedesign later we already catch non-200 errors above and SendErrMail
-	// Though need to be malleable for unknown JSON changes in the future
+	// Possibly redesign lateras  we already catch non-200 errors above and SendErrMail
+	// Though also need to be malleable for unknown JSON changes in the future
 
 	if (last != -1) && (strings.EqualFold(results[0].Array()[last].String(), "Total Amount Due")) {
 
