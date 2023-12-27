@@ -24,9 +24,15 @@ import (
 	"time"
 )
 
-var TestDebug, NoMail bool = false, false
+//--- History --- //
+// 27.12.2023 - Update Script because they consolidated path on the API to be one word instead of 3
 
-const QueryAPI string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw=="
+
+// API V1 - Was correct until about Fall of the year 2023
+//const QueryAPIv1 string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw=="
+const QueryAPI string = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGVuZGluZ1BheW1lbnRzVG90YWwv"         // API V2
+
+var TestDebug, NoMail bool = false, false
 
 type Record struct {
 	Type    string
@@ -89,6 +95,7 @@ func QueryNotice(r *Record) {
 
 	// Explicitfy the separators for ease
 	QueryURL := string(baseURL) + "0/" + r.Zipcode + "/" + r.Data + "/1/25/"
+        QueryURL = QueryURL + "0/"             // API V2 requirement
 	fmt.Println("Target URL", QueryURL)
 
 	var data []byte
