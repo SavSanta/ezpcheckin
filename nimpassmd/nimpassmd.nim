@@ -23,7 +23,11 @@ proc CreateRecordFromConfig(cfgdata: string): Record =
     rec.Type = "License"
     rec.Data = "KickinDaggers"
     rec.State = "MD"
-    rec.State = "21227"
+    rec.Zip = "21227"
+
+    echo "gang gang -->", rec
+
+
     return rec
 
 
@@ -58,8 +62,11 @@ if open(f, "ezpstore.txt"):
       if line.strip().startswith("#") or line.strip() == "":
         continue
       chunks = line.strip(leading = true).split("||")
+      if chunks.len() != 5:
+        raise newException(CatchableError, "Insufficient chunks derived from config file. Verify Construction.")
+      apply(chunks, proc(x: string): string = x.strip())
 
-      CreateRecordFromConfig("hihater")
+      recs.add(CreateRecordFromConfig("hihater"))
       numRecs += 1
 
 
@@ -69,12 +76,10 @@ if open(f, "ezpstore.txt"):
   except CatchableError as e:
     echo "Unexpected Error: " & e.msg
   finally:
-    echo "Number of records ingested from config: ",numRecs
+    echo "Number of successful records ingested from config: ",numRecs
     close(f)
 else:
   raise newException(CatchableError, "Couldnt not read/access ezpstore.txt file.")
-
-
 
 
 
