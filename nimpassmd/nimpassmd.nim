@@ -15,15 +15,17 @@ type Record = object
   Data: string
   State: string
   Zip: string
+  Email: string
 
-proc CreateRecordFromConfig(cfgdata: string): Record =
+proc CreateRecordFromConfig(cfgdata: seq[string]): Record =
 
     var rec = Record()
 
-    rec.Type = "License"
-    rec.Data = "KickinDaggers"
-    rec.State = "MD"
-    rec.Zip = "21227"
+    rec.Type = cfgdata[0]
+    rec.Data = cfgdata[1]
+    rec.State = cfgdata[2]
+    rec.Zip = cfgdata[3]
+    rec.Email = cfgdata[4]
 
     echo "gang gang -->", rec
 
@@ -66,7 +68,7 @@ if open(f, "ezpstore.txt"):
         raise newException(CatchableError, "Insufficient chunks derived from config file. Verify Construction.")
       apply(chunks, proc(x: string): string = x.strip())
 
-      recs.add(CreateRecordFromConfig("hihater"))
+      recs.add(CreateRecordFromConfig(chunks))
       numRecs += 1
 
 
@@ -80,6 +82,5 @@ if open(f, "ezpstore.txt"):
     close(f)
 else:
   raise newException(CatchableError, "Couldnt not read/access ezpstore.txt file.")
-
 
 
