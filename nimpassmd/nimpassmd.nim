@@ -44,14 +44,12 @@ proc QueryNoticeAPI(r: Record) =
       baseURL: string
       QueryURL: string 
     
-    
     baseURL = decode(queryAPI)
 
     if testDebug == true:
       echo "Base URL => ", baseURL
       echo "Zipcode is => ", r.Zip
       echo "License Plate is => ", r.Data
-
 
     # Explicitfy the separators for ease
     QueryURL = baseURL & "0/" & r.Zip & "/" & r.Data & "/1/25/"
