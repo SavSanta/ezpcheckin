@@ -10,7 +10,7 @@ import std/sequtils
 from std/base64 import decode
 #import std/smtp       # For some reason theyre forcing you to use a compiled with SSL in this language as if.. :eyeroll
 
-var testDebug = true
+var testDebug = false
 
 proc SearchJSONResponse(jdata: string)
 let queryAPI = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw"
@@ -60,17 +60,27 @@ proc QueryNoticeAPI(r: Record) =
 
 
     if testDebug == true:
-      # Clean this junk up eventually to use a try/except/finally
+      # TODO Clean this junk up eventually to use a try/except/finally
       var f: File
       discard open(f, "sample.json")
       jsondata = readFile("sample.json")
       f.close()
     else:
+      # TODO Also clean this crap up eventually to use a try/except/finally
+      var client = newHttpClient(userAgent = "Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3485.133 Mobile Safari/537.36")
+      var resp = httpClient.Response()
+      resp = client.get(QueryURL)
+      client.close()
       
-    
-    
-    
-    SearchJSONResponse(jsondata)
+      if testDebug == true:
+        echo "STATUS CODE: ", code(resp)
+        echo "BODY: ", jsondata
+
+      # TODO Eventually catch other error/status codes        
+      if resp.code() == HTTPCode(200):
+        echo "Received status 200 response code."
+        jsondata = resp.body()
+        SearchJSONResponse(jsondata)
 
 
 proc SearchJSONResponse(jdata: string) =
@@ -87,6 +97,7 @@ proc SearchJSONResponse(jdata: string) =
       echo "- ", pObj[cnt]["itemDescription"].getStr(), " ",pObj[cnt]["formattedTotal"].getStr()
       inc(cnt)
 
+    # TODO - So this works even if the arrSize is only 1 but can prob decide If i want to switchout to a 'arrSize > -1' compare. So far doesnt seem necessary
     if arrSize-1 > 0:
       echo "Final ", pObj[arrSize-1]["itemDescription"].getStr()," ",pObj[arrSize-1]["formattedTotal"].getStr()
 
