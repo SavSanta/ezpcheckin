@@ -41,12 +41,12 @@ proc CreateRecordFromConfig(cfgdata: seq[string]): Record =
 
 proc QueryNoticeAPI(r: Record) =
 
-    # Currently built to use only the LIC type   
+    # Currently built to use only the LIC type
     var
       baseURL: string
-      QueryURL: string 
+      QueryURL: string
       jsondata: string
-    
+
     baseURL = decode(queryAPI)
 
     if testDebug == true:
@@ -71,12 +71,12 @@ proc QueryNoticeAPI(r: Record) =
       var resp = httpClient.Response()
       resp = client.get(QueryURL)
       client.close()
-      
+
       if testDebug == true:
         echo "STATUS CODE: ", code(resp)
         echo "BODY: ", jsondata
 
-      # TODO Eventually catch other error/status codes        
+      # TODO Eventually catch other error/status codes
       if resp.code() == HTTPCode(200):
         echo "Received status 200 response code."
         jsondata = resp.body()
@@ -90,7 +90,7 @@ proc SearchJSONResponse(jdata: string) =
 
     let pObj = parseJson(jdata)
     let arrSize = pObj.len()
-    
+
     echo "Array Object Size: ", arrSize
 
     while cnt < arrSize:
@@ -123,7 +123,7 @@ if open(f, "ezpstore.txt"):
       if chunks.len() != 5:
         raise newException(CatchableError, "Insufficient chunks derived from config file. Verify Construction.")
       apply(chunks, proc(x: string): string = x.strip())
-      
+
       recs.add(CreateRecordFromConfig(chunks))
       numRecs += 1
 
