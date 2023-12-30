@@ -11,6 +11,8 @@ from std/base64 import decode
 #import std/smtp       # For some reason theyre forcing you to use a compiled with SSL in this language as if.. :eyeroll
 
 var testDebug = true
+
+proc SearchJSONResponse(jdata: string)
 let queryAPI = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw"
 
 type Record = object
@@ -55,14 +57,33 @@ proc QueryNoticeAPI(r: Record) =
     QueryURL = baseURL & "0/" & r.Zip & "/" & r.Data & "/1/25/"
     echo "Target URL: ", QueryURL
 
+    var
+      f: File
+      jdata: string
 
 
+    discard open(f, "sample.json")
+    let jsondata = readFile("sample.json")
+    f.close()
+    SearchJSONResponse(jsondata)
 
 
+proc SearchJSONResponse(jdata: string) =
 
-#proc SearchJSONResponse()
+    var cnt: int
+    var msg: string
 
+    let pObj = parseJson(jdata)
+    let arrSize = pObj.len()
+    
+    echo "Array Object Size: ", arrSize
 
+    while cnt < arrSize:
+      echo "- ", pObj[cnt]["itemDescription"].getStr(), " ",pObj[cnt]["formattedTotal"].getStr()
+      inc(cnt)
+
+    if arrSize-1 > 0:
+      echo "Final ", pObj[arrSize-1]["itemDescription"].getStr()," ",pObj[arrSize-1]["formattedTotal"].getStr()
 
 
 when isMainModule:
