@@ -45,6 +45,7 @@ proc QueryNoticeAPI(r: Record) =
     var
       baseURL: string
       QueryURL: string 
+      jsondata: string
     
     baseURL = decode(queryAPI)
 
@@ -57,14 +58,18 @@ proc QueryNoticeAPI(r: Record) =
     QueryURL = baseURL & "0/" & r.Zip & "/" & r.Data & "/1/25/"
     echo "Target URL: ", QueryURL
 
-    var
-      f: File
-      jdata: string
 
-
-    discard open(f, "sample.json")
-    let jsondata = readFile("sample.json")
-    f.close()
+    if testDebug == true:
+      # Clean this junk up eventually to use a try/except/finally
+      var f: File
+      discard open(f, "sample.json")
+      jsondata = readFile("sample.json")
+      f.close()
+    else:
+      
+    
+    
+    
     SearchJSONResponse(jsondata)
 
 
