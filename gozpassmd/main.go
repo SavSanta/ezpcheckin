@@ -158,7 +158,7 @@ func SearchJSONResponse(data []byte) *string {
 	last := (len(results[0].Array()) - 1)
 
 	// When the value of last will be -1 (0 find minus 1) and cause a bounds fail
-	// Possibly redesign lateras  we already catch non-200 errors above and SendErrMail
+	// Possibly redesign later as we already catch non-200 errors above and SendErrMail
 	// Though also need to be malleable for unknown JSON changes in the future
 
 	if (last != -1) && (strings.EqualFold(results[0].Array()[last].String(), "Total Amount Due")) {
