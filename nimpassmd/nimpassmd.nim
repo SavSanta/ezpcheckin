@@ -29,7 +29,6 @@ proc CreateRecordFromConfig(cfgdata: seq[string]): Record =
 
     echo "gang gang -->", rec
 
-
     return rec
 
 
@@ -38,10 +37,6 @@ proc CreateRecordFromConfig(cfgdata: seq[string]): Record =
 
 
 #proc SearchJSONResponse()
-
-
-
-
 
 
 
