@@ -7,8 +7,11 @@ import json
 import std/httpclient
 import std/logging
 import std/sequtils
+from std/base64 import decode
 #import std/smtp       # For some reason theyre forcing you to use a compiled with SSL in this language as if.. :eyeroll
 
+var testDebug = true
+let queryAPI = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw"
 
 type Record = object
   Type: string
@@ -27,13 +30,36 @@ proc CreateRecordFromConfig(cfgdata: seq[string]): Record =
     rec.Zip = cfgdata[3]
     rec.Email = cfgdata[4]
 
-    echo "gang gang -->", rec
+    if testDebug == true:
+      echo "gang gang -->", rec
 
     return rec
 
 
 
-#proc QueryNoticeAPI()
+proc QueryNoticeAPI(r: Record) =
+
+    # Currently built to use only the LIC type   
+    var
+      baseURL: string
+      QueryURL: string 
+    
+    
+    baseURL = decode(queryAPI)
+
+    if testDebug == true:
+      echo "Base URL => ", baseURL
+      echo "Zipcode is => ", r.Zip
+      echo "License Plate is => ", r.Data
+
+
+    # Explicitfy the separators for ease
+    QueryURL = baseURL & "0/" & r.Zip & "/" & r.Data & "/1/25/"
+    echo "Target URL: ", QueryURL
+
+
+
+
 
 
 #proc SearchJSONResponse()
@@ -62,11 +88,9 @@ if open(f, "ezpstore.txt"):
       if chunks.len() != 5:
         raise newException(CatchableError, "Insufficient chunks derived from config file. Verify Construction.")
       apply(chunks, proc(x: string): string = x.strip())
-
+      
       recs.add(CreateRecordFromConfig(chunks))
       numRecs += 1
-
-
 
   except IOError:
     echo "Input/Output Error while reading ezpstore.txt"
@@ -79,3 +103,7 @@ else:
   raise newException(CatchableError, "Couldnt not read/access ezpstore.txt file.")
 
 
+if testDebug == true:
+  echo recs
+
+QueryNoticeAPI(recs[0])
