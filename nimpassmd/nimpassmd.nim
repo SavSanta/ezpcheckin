@@ -13,7 +13,7 @@ from std/base64 import decode
 var testDebug = false
 
 proc SearchJSONResponse(jdata: string)
-let queryAPI = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw"
+let queryAPI = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGVuZGluZ1BheW1lbnRzVG90YWw"
 
 type Record = object
   Type: string
