@@ -33,7 +33,7 @@ proc CreateRecordFromConfig(cfgdata: seq[string]): Record =
     rec.Email = cfgdata[4]
 
     if testDebug == true:
-      echo "gang gang -->", rec
+      echo "Record Creating: -->", rec
 
     return rec
 
@@ -137,8 +137,5 @@ if open(f, "ezpstore.txt"):
 else:
   raise newException(CatchableError, "Couldnt not read/access ezpstore.txt file.")
 
-
-if testDebug == true:
-  echo recs
 
 QueryNoticeAPI(recs[0])
