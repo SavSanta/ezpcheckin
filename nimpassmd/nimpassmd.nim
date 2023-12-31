@@ -100,6 +100,7 @@ proc SearchJSONResponse(jdata: string) =
     # TODO - So this works even if the arrSize is only 1 but can prob decide If i want to switchout to a 'arrSize > -1' compare. So far doesnt seem necessary
     if arrSize-1 > 0:
       echo "Final ", pObj[arrSize-1]["itemDescription"].getStr()," ",pObj[arrSize-1]["formattedTotal"].getStr()
+      msg = "The " & pObj[arrSize-1]["itemDescription"].getStr() & " is " & pObj[arrSize-1]["formattedTotal"].getStr() & " from " & repr(arrSize) & "tolls."
 
 
 when isMainModule:
