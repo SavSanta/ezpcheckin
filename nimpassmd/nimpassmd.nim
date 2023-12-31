@@ -67,7 +67,7 @@ proc QueryNoticeAPI(r: Record) =
       f.close()
     else:
       # TODO Also clean this crap up eventually to use a try/except/finally
-      var client = newHttpClient(userAgent ="Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3485.133 Mobile Safari/537.36", timeout=27000)
+      var client = newHttpClient(userAgent="Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3485.133 Mobile Safari/537.36", timeout=27000)
       var resp = httpClient.Response()
       resp = client.get(QueryURL)
       client.close()
