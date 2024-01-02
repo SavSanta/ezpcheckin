@@ -55,7 +55,7 @@ proc QueryNoticeAPI(r: Record) =
       echo "License Plate is => ", r.Data
 
     # Explicitfy the separators for ease
-    QueryURL = baseURL & "0/" & r.Zip & "/" & r.Data & "/1/25/"
+    QueryURL = baseURL & "0/" & r.Zip & "/" & r.Data & "/1/25/" & "0/"
     echo "Target URL: ", QueryURL
 
 
