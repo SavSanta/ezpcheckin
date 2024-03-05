@@ -51,7 +51,7 @@ proc QueryNoticeAPI(r: Record) =
     # Currently built to use only the LIC type
     var
       baseURL: string
-      QueryURL: string
+      queryURL: string
       jsondata: string
 
     baseURL = decode(queryAPI)
@@ -62,8 +62,8 @@ proc QueryNoticeAPI(r: Record) =
       echo "License Plate is => ", r.Data
 
     # Explicitfy the separators for ease
-    QueryURL = baseURL & "0/" & r.Zip & "/" & r.Data & "/1/25/" & "0/"
-    echo "Target URL: ", QueryURL
+    queryURL = baseURL & "0/" & r.Zip & "/" & r.Data & "/1/25/" & "0/"
+    echo "Target URL: ", queryURL
 
 
     if testDebug == true:
@@ -76,7 +76,7 @@ proc QueryNoticeAPI(r: Record) =
       # TODO Also clean this crap up eventually to use a try/except/finally
       var client = newHttpClient(userAgent="Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3485.133 Mobile Safari/537.36", timeout=27000)
       var resp = httpClient.Response()
-      resp = client.get(QueryURL)
+      resp = client.get(queryURL)
       client.close()
 
       if testDebug == true:
