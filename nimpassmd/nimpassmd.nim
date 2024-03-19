@@ -119,6 +119,10 @@ proc SearchJSONResponse(jdata: string) =
 
 proc SendMail(message: string, emailto: seq[string]) =
 
+    if NoMail:
+      echo "The '-nomail' flag is enabled."
+      return
+
     let smtpConn = newSmtp(useSsl = false, debug=false)
 
     
@@ -137,10 +141,9 @@ proc SendMail(message: string, emailto: seq[string]) =
 
 
 proc SendErrorMail(errmessage: string, emailto: seq[string]) =
-
-    echo "The '-nomail' flag is set to ->"
     
     if NoMail:
+      echo "The '-nomail' flag is enabled."
       return
 
 
@@ -161,6 +164,13 @@ proc SendErrorMail(errmessage: string, emailto: seq[string]) =
     
     
 when isMainModule:
+
+# Parse commandline args for nomail
+
+if "-nomail" in commandLineParams()
+  # Set the NoMail global to enabled
+  NoMail = true
+
 
 # Open File For Reads Cookbook
   var
