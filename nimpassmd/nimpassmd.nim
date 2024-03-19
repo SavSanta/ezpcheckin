@@ -15,9 +15,11 @@ import std/httpclient
 import std/logging
 import std/sequtils
 from std/base64 import decode
-#import std/smtp       # For some reason theyre forcing you to use a compiled with SSL in this language as if.. :eyeroll
+import std/smtp       # For some reason theyre forcing you to use a compiled with SSL in this language as if.. :eyeroll
 
 var testDebug = false
+var NoMail = false
+
 
 proc SearchJSONResponse(jdata: string)
 let queryAPI = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGVuZGluZ1BheW1lbnRzVG90YWwv"
@@ -110,6 +112,54 @@ proc SearchJSONResponse(jdata: string) =
       msg = "The " & pObj[arrSize-1]["itemDescription"].getStr() & " is " & pObj[arrSize-1]["formattedTotal"].getStr() & " from " & repr(arrSize) & "tolls."
 
 
+#proc MakePayment() {
+#
+#}
+
+
+proc SendMail(message: string, emailto: seq[string]) =
+
+    let smtpConn = newSmtp(useSsl = false, debug=false)
+
+    
+    var fromaddr = "banana@example.net"
+    var msg = createMessage("Subject: Tolls Alert!",
+                  message,
+                  @["whatisthis@whatisthismail.net"])
+    
+    
+    smtpConn.connect("127.0.0.1", Port 25)
+    smtpConn.sendmail(fromaddr, emailto, $msg)
+    
+    # how to error check here
+
+    echo "Message Dispatched: ", message
+
+
+proc SendErrorMail(errmessage: string, emailto: seq[string]) =
+
+    echo "The '-nomail' flag is set to ->"
+    
+    if NoMail:
+      return
+
+
+    let smtpConn = newSmtp(useSsl = false, debug=false)
+
+    var fromaddr = "banana@example.net"
+    var msg = createMessage("Subject: Tolls Error Issue!",
+                  "Error Occurred in Script:\n\t" & errmessage,
+                  @["whatisthis@whatisthismail.net"])
+    
+    
+    smtpConn.connect("127.0.0.1", Port 25)
+    smtpConn.sendmail(fromaddr, emailto, $msg)
+    
+    # how to error check here
+
+    echo "Error Message Email Dispatched: ", errmessage
+    
+    
 when isMainModule:
 
 # Open File For Reads Cookbook
