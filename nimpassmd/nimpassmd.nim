@@ -2,8 +2,8 @@
 # Compiled at 2022-05-05
 # Copyright (c) 2006-2021 by Andreas Rumpf
 # git hash: 0565a70eab02122ce278b98181c7d1170870865c
-# nim -c -d:ssl -d:strip -d:release nimpassmd       # Smallest Linux Binary 
-# nim -c -d:ssl -d:strip nimpassmd        # Second smallest Linux binary
+# nim c -d:ssl -d:strip -d:release nimpassmd       # Smallest Linux Binary 
+# nim c -d:ssl -d:strip nimpassmd        # Second smallest Linux binary
 # nim c -d:ssl -d=mingw -d:danger -d:strip --opt:size --passL:-Wl,--dynamicbase --app:console -o:nimpasswin nimpassmd  # Windows binary
 
 import random
