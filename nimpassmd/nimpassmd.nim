@@ -11,6 +11,7 @@ import times
 import strformat
 import strutils
 import json
+import std/os         # std/cmdline doesnt exist btw
 import std/httpclient
 import std/logging
 import std/sequtils
@@ -165,45 +166,44 @@ proc SendErrorMail(errmessage: string, emailto: seq[string]) =
     
 when isMainModule:
 
-# Parse commandline args for nomail
+  # Parse commandline args for nomail
+  if "-nomail" in commandLineParams():
+    # Set the NoMail global to enabled
+    NoMail = true
 
-if "-nomail" in commandLineParams()
-  # Set the NoMail global to enabled
-  NoMail = true
 
-
-# Open File For Reads Cookbook
+  # Open File For Reads Cookbook
   var
-    f: File
-    recs: seq[Record]
-    line: string
-    chunks: seq[string]
-    numRecs: int
+      f: File
+      recs: seq[Record]
+      line: string
+      chunks: seq[string]
+      numRecs: int
 
-if open(f, "ezpstore.txt"):
-  try:
-    echo "=== Reading ezpstore.txt ==="
+  if open(f, "ezpstore.txt"):
+    try:
+      echo "=== Reading ezpstore.txt ==="
+      
+      while f.readLine(line):
+        if line.strip().startswith("#") or line.strip() == "":
+          continue
+        chunks = line.strip(leading = true).split("||")
+        if chunks.len() != 5:
+          raise newException(CatchableError, "Insufficient chunks derived from config file. Verify Construction.")
+        apply(chunks, proc(x: string): string = x.strip())
 
-    while f.readLine(line):
-      if line.strip().startswith("#") or line.strip() == "":
-        continue
-      chunks = line.strip(leading = true).split("||")
-      if chunks.len() != 5:
-        raise newException(CatchableError, "Insufficient chunks derived from config file. Verify Construction.")
-      apply(chunks, proc(x: string): string = x.strip())
+        recs.add(CreateRecordFromConfig(chunks))
+        numRecs += 1
 
-      recs.add(CreateRecordFromConfig(chunks))
-      numRecs += 1
-
-  except IOError:
-    echo "Input/Output Error while reading ezpstore.txt"
-  except CatchableError as e:
-    echo "Unexpected Error: " & e.msg
-  finally:
-    echo "Number of successful records ingested from config: ",numRecs
-    close(f)
-else:
-  raise newException(CatchableError, "Couldnt not read/access ezpstore.txt file.")
+    except IOError:
+      echo "Input/Output Error while reading ezpstore.txt"
+    except CatchableError as e:
+      echo "Unexpected Error: " & e.msg
+    finally:
+      echo "Number of successful records ingested from config: ",numRecs
+      close(f)
+  else:
+    raise newException(CatchableError, "Couldnt not read/access ezpstore.txt file.")
 
 
-QueryNoticeAPI(recs[0])
+  QueryNoticeAPI(recs[0])
