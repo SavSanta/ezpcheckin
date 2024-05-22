@@ -22,6 +22,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"mpldr.codes/ansi"
 )
 
 //--- History --- //
