@@ -1,4 +1,3 @@
-#![allow(unused)]
 
 use std::env;
 use std::fmt;
@@ -7,7 +6,7 @@ use std::io::prelude::*;
 use std::path::Path;
 use base64;
 use reqwest;
-//use lettre;
+use lettre;
 use rand;       //random library support
 use serde_json; // Dunno why this even exists opposed to regular serde
 use serde::{Serialize,Deserialize};
@@ -24,13 +23,13 @@ static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Record<'a> {
+struct Record {
 
-    Type: &'a str,
-    Data: &'a str,
-    State: &'a str,
-    Zipcode: &'a str,
-    Email:Vec<&'a str>,
+    Type: String,
+    Data: String,
+    State: String,
+    Zipcode: String,
+    Email: String,
 
 }
 
@@ -47,29 +46,18 @@ fn main() {
         .json("{'name':'disco bob', 'subject': 'Math', 'grade' : 'fifth'")
         .send();
 
+    
+    
 }
 
-fn CreateRecordFromConfig<'a>(cfgdata : String) -> Record<'a>
+fn CreateRecordFromConfig(cfgdata : String)
 {
 
-    //let mut rec : Record ;
+    let mut rec : Record ;
     let mut chunks: Vec<&str>;
      
-    chunks = cfgdata.split("||").collect();
-
-    if (chunks.len() == 5)
-    {
-        for chunk in chunks.iter_mut()
-        {
-            *chunk = chunk.trim();
-        }
-    }
-    else 
-    {
-        panic!("config file has insufficient chunks.");
-    }
-
-    Record{Type: chunks[0], Data: chunks[1], State: chunks[2], Zipcode: chunks[3], Email: chunks[4].split(",").collect::<Vec<_>>()}
+    let splitter = String::from("||");
+    chunks = cfgdata.split(&splitter).collect();
 
 
 }
