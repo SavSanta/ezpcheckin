@@ -1,0 +1,20 @@
+[package]
+name = "rustzpassmd"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+base64 = "0.22.1"
+err = "0.0.8"
+lettre = "0.11.7"
+rand = "0.8.5"
+reqwest = { version = "0.12.7", features = ["blocking", "json"] }
+serde = { version = "1.0", features = ["derive"] }
+
+serde_json = "1.0.127"
+
+
+[[bin]]
+name = "rustzpassmd"
+path = "rustzpassmd.rs"
