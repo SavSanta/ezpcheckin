@@ -7,7 +7,7 @@ use std::io::prelude::*;
 use std::path::Path;
 use base64;
 use reqwest;
-use lettre;
+//use lettre;
 use rand;       //random library support
 use serde_json; // Dunno why this even exists opposed to regular serde
 use serde::{Serialize,Deserialize};
@@ -24,13 +24,13 @@ static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Record {
+struct Record<'a> {
 
-    Type: String,
-    Data: String,
-    State: String,
-    Zipcode: String,
-    Email: Vec<&str>,
+    Type: &'a str,
+    Data: &'a str,
+    State: &'a str,
+    Zipcode: &'a str,
+    Email:Vec<&'a str>,
 
 }
 
@@ -49,7 +49,7 @@ fn main() {
 
 }
 
-fn CreateRecordFromConfig(cfgdata : String) -> Record
+fn CreateRecordFromConfig<'a>(cfgdata : String) -> Record<'a>
 {
 
     //let mut rec : Record ;
@@ -69,7 +69,7 @@ fn CreateRecordFromConfig(cfgdata : String) -> Record
         panic!("config file has insufficient chunks.");
     }
 
-    Record{chunks[0], chunks[1], chunks[2], chunks[3], chunks[4].split(",").collect::<Vec<_>>()}
+    Record{Type: chunks[0], Data: chunks[1], State: chunks[2], Zipcode: chunks[3], Email: chunks[4].split(",").collect::<Vec<_>>()}
 
 
 }
