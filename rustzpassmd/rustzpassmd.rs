@@ -1,3 +1,4 @@
+#![allow(unused)]
 
 use std::env;
 use std::fmt;
@@ -29,7 +30,7 @@ struct Record {
     Data: String,
     State: String,
     Zipcode: String,
-    Email: String,
+    Email: Vec<&str>,
 
 }
 
@@ -46,18 +47,29 @@ fn main() {
         .json("{'name':'disco bob', 'subject': 'Math', 'grade' : 'fifth'")
         .send();
 
-    
-    
 }
 
-fn CreateRecordFromConfig(cfgdata : String)
+fn CreateRecordFromConfig(cfgdata : String) -> Record
 {
 
-    let mut rec : Record ;
+    //let mut rec : Record ;
     let mut chunks: Vec<&str>;
      
-    let splitter = String::from("||");
-    chunks = cfgdata.split(&splitter).collect();
+    chunks = cfgdata.split("||").collect();
+
+    if (chunks.len() == 5)
+    {
+        for chunk in chunks.iter_mut()
+        {
+            *chunk = chunk.trim();
+        }
+    }
+    else 
+    {
+        panic!("config file has insufficient chunks.");
+    }
+
+    Record{chunks[0], chunks[1], chunks[2], chunks[3], chunks[4].split(",").collect::<Vec<_>>()}
 
 
 }
