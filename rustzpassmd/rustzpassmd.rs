@@ -24,13 +24,13 @@ static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Record<'a> {
+struct Record {
 
-    Type: &'a str,
-    Data: &'a str,
-    State: &'a str,
-    Zipcode: &'a str,
-    Email:Vec<&'a str>,
+    Type: String,
+    Data: String,
+    State: String,
+    Zipcode: String,
+    Email:Vec<String>,
 
 }
 
@@ -49,7 +49,7 @@ fn main() {
 
 }
 
-fn CreateRecordFromConfig<'a>(cfgdata : String) -> Record<'a>
+fn CreateRecordFromConfig(cfgdata : String) -> Record
 {
 
     //let mut rec : Record ;
@@ -69,7 +69,7 @@ fn CreateRecordFromConfig<'a>(cfgdata : String) -> Record<'a>
         panic!("config file has insufficient chunks.");
     }
 
-    Record{Type: chunks[0], Data: chunks[1], State: chunks[2], Zipcode: chunks[3], Email: chunks[4].split(",").collect::<Vec<_>>()}
+    Record{Type: chunks[0].to_string(), Data: chunks[1].to_string(), State: chunks[2].to_string(), Zipcode: chunks[3].to_string(), Email: chunks[4].split(",").map(|v| v.to_string()).collect::<Vec<_>>()}
 
 
 }
