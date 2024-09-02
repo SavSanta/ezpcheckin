@@ -5,7 +5,7 @@ use std::fmt;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
-use base64;
+use base64::prelude::*;
 use reqwest;
 //use lettre;
 use rand;       //random library support
@@ -74,8 +74,86 @@ fn CreateRecordFromConfig(cfgdata : String) -> Record
 
 }
 
-fn QueryNotice()
+fn QueryNotice(r : Record)
 {
+    // Currently built only to to use the License plate + zip
+
+	let baseURL = String::from_utf8(BASE64_STANDARD.decode(QueryAPI).unwrap()).unwrap();
+
+    if TestDebug == true {
+        println!("Base URL => {}\n", baseURL);
+        println!("Zipcode is => {}\n", r.Zipcode);
+        println!("License Plate is => {}\n", r.Data);
+    }
+
+    // Explicitfy the separators for ease
+    //let QueryURL = baseURL + "0/" + r.Zipcode + "/" + r.Data + "/1/25/"                    // API V1 (deprecated)
+    let  QueryURL = baseURL + "0/" + &r.Zipcode + "/" + &r.Data + "/1/25/" + "0/"  ;           // API V2 requirement
+    println!("Target URL {}", QueryURL);
+
+    // mutual data
+    let mut resp_data  : String;
+
+    // If we're not in TestDebug mode then dont look for a sample.json file
+	if TestDebug == false {
+        // Should be a Result<reqwest:Response> type
+        let resp_Result = reqwest::blocking::get(QueryURL).expect("FAILURE TO REACH BASEURL").text();      // The lifetime scope is weird here . most likely will have to move it up
+
+        resp_data = match resp_Result {
+            Ok(Response) => {  
+                  
+                if resp_Result.expect("Status Code Error").status().as_u16() > 299 {
+                    // local 'err' created as 'err' is nil as we do get a Valid Bad Response if it reaches here and will segfault
+                    println!("Response had a StatusCode: {}\n Body: {}\n\n", resp_Result.status().as_str(), resp_data.text());
+                    //log.Println(err.Error())
+                    //SendErrorMail(err.Error(), r.Email)
+                    panic!("Status Code Response Error: {}", resp_Result.status().as_str());
+                }
+                else {
+                    println!("Response data seem to be successful");
+                    resp_Result.unwrap().text();
+
+                }
+
+            },
+            Err(error) => { 
+                //SendErrorMail(err.Error(), r.Email)
+                panic!("Problem making the request: {error:?}");
+            },
+        };
+
+	} else {
+
+		println!("Utilizing local sample.json file");
+
+		// Read in sample.json since no current tolls exist
+        let mut data_sample = Vec::new();
+        let sample_file_result = File::open("sample.json");
+    
+        let sample_file = match sample_file_result {
+            Ok(file) => file,
+            Err(error) => panic!("Error opening sample.json: {error:?}"),
+        };
+    
+        // read the whole file
+        sample_file_result.read_to_end(&mut data_sample);
+
+		//data, err = io.ReadAll(file)
+        //        fmt.Printf("Data JSON read:", string(data))
+
+	}
+
+	// Check length of bytes here.
+	// Check number of records
+	// Return nil + send email as response length mayve changed
+	/*time.Sleep(time.Duration(rand.Intn(4)) * time.Second) */
+
+	/*message := SearchJSONResponse(data)
+	if message != nil {
+		SendMail(message, r.Email)
+	} */
+
+	return
 
 }
 
