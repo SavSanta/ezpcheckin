@@ -74,7 +74,7 @@ fn CreateRecordFromConfig(cfgdata : String) -> Record
 
 }
 
-fn QueryNotice(r : Record)
+unsafe fn QueryNotice(r : Record)
 {
     // Currently built only to to use the License plate + zip
 
@@ -97,21 +97,22 @@ fn QueryNotice(r : Record)
     // If we're not in TestDebug mode then dont look for a sample.json file
 	if TestDebug == false {
         // Should be a Result<reqwest:Response> type
-        let resp_Result = reqwest::blocking::get(QueryURL).expect("FAILURE TO REACH BASEURL").text();      // The lifetime scope is weird here . most likely will have to move it up
+        let resp_Result = reqwest::blocking::get(QueryURL);//.expect("FAILURE TO REACH BASEURL").text();      // The lifetime scope is weird here . most likely will have to move it up
 
         resp_data = match resp_Result {
-            Ok(Response) => {  
+            Ok(ref Response) => {  
                   
-                if resp_Result.expect("Status Code Error").status().as_u16() > 299 {
+                if resp_Result.as_ref().expect("Status Code Error").status().as_u16() > 299 {
                     // local 'err' created as 'err' is nil as we do get a Valid Bad Response if it reaches here and will segfault
-                    println!("Response had a StatusCode: {}\n Body: {}\n\n", resp_Result.status().as_str(), resp_data.text());
+                    println!("Response had a StatusCode: {}\n Body: <not in code due to bug>\n\n", resp_Result.as_ref().unwrap().status().as_str() /*, resp_Result.unwrap().text()*/);
                     //log.Println(err.Error())
                     //SendErrorMail(err.Error(), r.Email)
-                    panic!("Status Code Response Error: {}", resp_Result.status().as_str());
+                    panic!("Status Code Response Error: {}", resp_Result.as_ref().unwrap().status().as_str());
                 }
                 else {
                     println!("Response data seem to be successful");
                     resp_Result.unwrap().text();
+                    String::from("Hi Test")
 
                 }
 
@@ -127,16 +128,16 @@ fn QueryNotice(r : Record)
 		println!("Utilizing local sample.json file");
 
 		// Read in sample.json since no current tolls exist
-        let mut data_sample = Vec::new();
-        let sample_file_result = File::open("sample.json");
+        	let mut data_sample = Vec::new();
+        	let sample_file_result = File::open("sample.json");
     
-        let sample_file = match sample_file_result {
-            Ok(file) => file,
-            Err(error) => panic!("Error opening sample.json: {error:?}"),
+        	let sample_file = match sample_file_result {
+            		Ok(ref file) => file,
+            		Err(error) => panic!("Error opening sample.json: {error:?}"),
         };
     
         // read the whole file
-        sample_file_result.read_to_end(&mut data_sample);
+        sample_file_result.expect("Error: Reading the sample.json file").read_to_end(&mut data_sample);
 
 		//data, err = io.ReadAll(file)
         //        fmt.Printf("Data JSON read:", string(data))
