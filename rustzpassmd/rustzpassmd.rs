@@ -37,13 +37,12 @@ struct Record {
 fn main() {
 
     // See how I can make this static/global
-    let mut client = reqwest::Client::new();
-
-
+    
     let args: Vec<String> = env::args().collect();
 
 
-    let res = client.post("http://httpbin.org/post")
+
+    
         .json("{'name':'disco bob', 'subject': 'Math', 'grade' : 'fifth'")
         .send();
 
@@ -76,8 +75,8 @@ fn CreateRecordFromConfig(cfgdata : String) -> Record
 
 unsafe fn QueryNotice(r : Record)
 {
-    // Currently built only to to use the License plate + zip
 
+    // Currently built only to to use the License plate + zip
 	let baseURL = String::from_utf8(BASE64_STANDARD.decode(QueryAPI).unwrap()).unwrap();
 
     if TestDebug == true {
@@ -90,6 +89,10 @@ unsafe fn QueryNotice(r : Record)
     //let QueryURL = baseURL + "0/" + r.Zipcode + "/" + r.Data + "/1/25/"                    // API V1 (deprecated)
     let  QueryURL = baseURL + "0/" + &r.Zipcode + "/" + &r.Data + "/1/25/" + "0/"  ;           // API V2 requirement
     println!("Target URL {}", QueryURL);
+
+    //  Creation and actuation os webclient 
+    let mut client = reqwest::Client::new();
+    let res = client.post("http://httpbin.org/post")
 
     // mutual data
     let mut resp_data  : String;
