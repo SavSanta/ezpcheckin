@@ -90,10 +90,6 @@ unsafe fn QueryNotice(r : Record)
     let  QueryURL = baseURL + "0/" + &r.Zipcode + "/" + &r.Data + "/1/25/" + "0/"  ;           // API V2 requirement
     println!("Target URL {}", QueryURL);
 
-    //  Creation and actuation os webclient 
-    let mut client = reqwest::Client::new();
-    let res = client.post("http://httpbin.org/post")
-
     // mutual data
     let mut resp_data  : String;
 
@@ -180,4 +176,5 @@ fn SendErrorMail()
 {
 
 }
+
 
