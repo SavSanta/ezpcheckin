@@ -37,7 +37,6 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     TestDebug = args.contains(&String::from("-testdebug"));
     NoMail = args.contains(&String::from("-nomail"));
-    
     println!("The tesdebug values is {}", TestDebug);
     
     }
@@ -89,15 +88,15 @@ unsafe fn QueryNotice(r : Record)
     let  QueryURL = baseURL + "0/" + &r.Zipcode + "/" + &r.Data + "/1/25/" + "0/"  ;           // API V2 requirement
     println!("Target URL {}", QueryURL);
 
-    // mutable data holder for successful responses
-    let mut resp_data  : String;
+    // mutable data holder for successful responses or mocked sample.json file
+    let mut json_resp_data = String::new();
 
     // If we're not in TestDebug mode then dont look for a sample.json file
     if TestDebug == false {
         // Should be a Result<reqwest:Response> type
     let resp_Result = reqwest::blocking::get(QueryURL);//.expect("FAILURE TO REACH BASEURL").text();      // The lifetime scope is weird here . most likely will have to move it up
 
-        resp_data = match resp_Result {
+        json_resp_data = match resp_Result {
             Ok(ref Response) => {  
                   
                 if resp_Result.as_ref().expect("Status Code Error").status().as_u16() > 299 {
@@ -126,20 +125,19 @@ unsafe fn QueryNotice(r : Record)
 		println!("Utilizing local sample.json file");
 
 		// Read in sample.json since no current tolls exist
-        	let mut data_sample_text = String::new();
         	let sample_file_result = File::open("sample.json");
-    
 
     		// I still dont understand this dumb match pattern and how each passes to the other
     		// sample_file when it successfully acquired and checked with print, printed "OK(21694)". So it was an OK with the amount of bytes. Actually the exact size in bytes of the sample.json file
     		// LL: I had to borrow the stupid file as a mutable in order to read the mutable string?
         	let sample_file = match sample_file_result {
-            		Ok(mut file) => file.read_to_string(&mut data_sample_text),
+        	        // read the whole file or error out
+            		Ok(mut file) => file.read_to_string(&mut json_resp_data),
             		Err(error) => panic!("Error opening sample.json: {error:?}"),
         };
     
-        // read the whole file
-        println!("Data JSON read:\t {:?}",data_sample_text)
+        // print the sample data to stdout
+        println!("Data JSON read:\t {:?}",json_resp_data)
 
 	}
 
