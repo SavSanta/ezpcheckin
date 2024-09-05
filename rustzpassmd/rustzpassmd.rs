@@ -7,6 +7,7 @@ use std::io::prelude::*;
 use std::path::Path;
 use base64::prelude::*;
 use reqwest;
+use rand::Rng;
 //use lettre;
 use serde_json; // Dunno why this even exists opposed to regular serde
 use serde::{Serialize,Deserialize};
@@ -155,14 +156,15 @@ unsafe fn QueryNotice(r : Record)
 	{
 		use std::thread::sleep;
 		use std::time::Duration;
-		std::thread::sleep(Duration::new(3, 6));
+		std::thread::sleep(Duration::new(rand::thread_rng().gen_range(2..4), 0));
 	}
 
+/*
 	let message = SearchJSONResponse(data)
 	if message != nil {
 		SendMail(message, r.Email)
 	} 
-
+*/
 	return
 
 }
