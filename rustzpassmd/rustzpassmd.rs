@@ -12,11 +12,6 @@ use rand::Rng;
 use serde_json; // Dunno why this even exists opposed to regular serde
 use serde::{Serialize,Deserialize};
 
-
-// Deletable
-//static myrando : u8 = rand::random::<u8>();
-
-
 //const Queryv1API : &str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw==";
 const QueryAPI : &'static str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGVuZGluZ1BheW1lbnRzVG90YWwv";
 
@@ -30,7 +25,7 @@ struct Record {
     Data: String,
     State: String,
     Zipcode: String,
-    Email:Vec<String>,
+    Email: Vec<String>,
 
 }
 
@@ -49,7 +44,7 @@ fn main() {
 
 
     //let rec = CreateRecordFromConfig(std::string::String::new());
-    let rec = CreateRecordFromConfig(std::string::String::from("LIC || 1EH7635 || MD || 21040 || firaaxon0@yahoo.com"));
+    let rec = CreateRecordFromConfig(std::string::String::from("LIC || 7EH7532 || MD || 77040 || firkille@@hotbot.net"));
     unsafe { QueryNotice(rec) };
 
 }
@@ -57,9 +52,7 @@ fn main() {
 fn CreateRecordFromConfig(cfgdata : String) -> Record
 {
 
-    //let mut rec : Record ;
-    let mut chunks: Vec<&str>;
-     
+    let mut chunks: Vec<&str>;     
     chunks = cfgdata.split("||").collect();
 
     if (chunks.len() == 5)
@@ -83,7 +76,7 @@ unsafe fn QueryNotice(r : Record)
 {
 
     // Currently built only to to use the License plate + zip
-	let baseURL = String::from_utf8(BASE64_STANDARD.decode(QueryAPI).unwrap()).unwrap();
+    let baseURL = String::from_utf8(BASE64_STANDARD.decode(QueryAPI).unwrap()).unwrap();
 
     if TestDebug == true {
         println!("Base URL => {}\n", baseURL);
@@ -100,9 +93,9 @@ unsafe fn QueryNotice(r : Record)
     let mut resp_data  : String;
 
     // If we're not in TestDebug mode then dont look for a sample.json file
-	if TestDebug == false {
+    if TestDebug == false {
         // Should be a Result<reqwest:Response> type
-        let resp_Result = reqwest::blocking::get(QueryURL);//.expect("FAILURE TO REACH BASEURL").text();      // The lifetime scope is weird here . most likely will have to move it up
+    let resp_Result = reqwest::blocking::get(QueryURL);//.expect("FAILURE TO REACH BASEURL").text();      // The lifetime scope is weird here . most likely will have to move it up
 
         resp_data = match resp_Result {
             Ok(ref Response) => {  
