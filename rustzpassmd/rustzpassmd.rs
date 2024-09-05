@@ -34,11 +34,10 @@ fn main() {
     // See how I can make this static/global
     
     unsafe {
-    let args: Vec<String> = env::args().collect();
-    TestDebug = args.contains(&String::from("-testdebug"));
-    NoMail = args.contains(&String::from("-nomail"));
-    println!("The tesdebug values is {}", TestDebug);
-    
+        let args: Vec<String> = env::args().collect();
+        TestDebug = args.contains(&String::from("-testdebug"));
+        NoMail = args.contains(&String::from("-nomail"));
+        println!("The tesdebug values is {}", TestDebug);
     }
 
 
@@ -77,7 +76,8 @@ unsafe fn QueryNotice(r : Record)
     // Currently built only to to use the License plate + zip
     let baseURL = String::from_utf8(BASE64_STANDARD.decode(QueryAPI).unwrap()).unwrap();
 
-    if TestDebug == true {
+    if TestDebug == true 
+    {
         println!("Base URL => {}\n", baseURL);
         println!("Zipcode is => {}\n", r.Zipcode);
         println!("License Plate is => {}\n", r.Data);
@@ -94,7 +94,7 @@ unsafe fn QueryNotice(r : Record)
     // If we're not in TestDebug mode then dont look for a sample.json file
     if TestDebug == false {
         // Should be a Result<reqwest:Response> type
-    let resp_Result = reqwest::blocking::get(QueryURL);//.expect("FAILURE TO REACH BASEURL").text();      // The lifetime scope is weird here . most likely will have to move it up
+    let resp_Result = reqwest::blocking::get(QueryURL);//.expect("FAILURE TO REACH BASEURL").text();
 
         json_resp_data = match resp_Result {
             Ok(ref Response) => {  
@@ -150,9 +150,9 @@ unsafe fn QueryNotice(r : Record)
 		std::thread::sleep(Duration::new(rand::thread_rng().gen_range(2..4), 0));
 	}
 
-/*
-	let message = SearchJSONResponse(data)
-	if message != nil {
+
+	let message = SearchJSONResponse(json_resp_data);
+/*	if message != nil {
 		SendMail(message, r.Email)
 	} 
 */
