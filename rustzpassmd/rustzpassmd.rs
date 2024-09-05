@@ -169,7 +169,7 @@ unsafe fn QueryNotice(r : Record)
 
 }
 
-fn SearchJSONResponse() -> Result<Ok, Err>
+fn SearchJSONResponse()
 {
 
 }
