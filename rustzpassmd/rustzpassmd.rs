@@ -38,13 +38,19 @@ fn main() {
 
     // See how I can make this static/global
     
+    unsafe {
     let args: Vec<String> = env::args().collect();
-
-
-
+    TestDebug = args.contains(&String::from("-testdebug"));
+    NoMail = args.contains(&String::from("-nomail"));
     
-        .json("{'name':'disco bob', 'subject': 'Math', 'grade' : 'fifth'")
-        .send();
+    println!("The tesdebug values is {}", TestDebug);
+    
+    }
+
+
+    //let rec = CreateRecordFromConfig(std::string::String::new());
+    let rec = CreateRecordFromConfig(std::string::String::from("LIC || 1EH7635 || MD || 21040 || firaaxon0@yahoo.com"));
+    unsafe { QueryNotice(rec) };
 
 }
 
@@ -127,17 +133,22 @@ unsafe fn QueryNotice(r : Record)
 		println!("Utilizing local sample.json file");
 
 		// Read in sample.json since no current tolls exist
-        	let mut data_sample = Vec::new();
+        	let mut data_sample = String::new();
         	let sample_file_result = File::open("sample.json");
     
+
+    		// I still dont understand this dumb match pattern and how each passes to the other
+    		// sample_file when it successfully acquired and checked with print, printed "OK(21694)". So it was an OK with the amount of bytes. Actually the exact size in bytes of the sample.json file
+    		// LL: I had to borrow the stupid file as a mutable in order to read the mutable string?
         	let sample_file = match sample_file_result {
-            		Ok(ref file) => file,
+            		Ok(mut file) => file.read_to_string(&mut data_sample),
             		Err(error) => panic!("Error opening sample.json: {error:?}"),
         };
     
         // read the whole file
-        sample_file_result.expect("Error: Reading the sample.json file").read_to_end(&mut data_sample);
-
+        //sample_file_result.expect("Error: Reading the sample.json file").read_to_end(&mut data_sample);
+        println!("Read complete");
+        println!("file contents \t {:?}",sample_file)
 		//data, err = io.ReadAll(file)
         //        fmt.Printf("Data JSON read:", string(data))
 
@@ -176,5 +187,4 @@ fn SendErrorMail()
 {
 
 }
-
 
