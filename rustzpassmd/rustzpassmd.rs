@@ -96,7 +96,7 @@ unsafe fn QueryNotice(r : Record)
     let  QueryURL = baseURL + "0/" + &r.Zipcode + "/" + &r.Data + "/1/25/" + "0/"  ;           // API V2 requirement
     println!("Target URL {}", QueryURL);
 
-    // mutual data
+    // mutable data holder for successful responses
     let mut resp_data  : String;
 
     // If we're not in TestDebug mode then dont look for a sample.json file
@@ -133,7 +133,7 @@ unsafe fn QueryNotice(r : Record)
 		println!("Utilizing local sample.json file");
 
 		// Read in sample.json since no current tolls exist
-        	let mut data_sample = String::new();
+        	let mut data_sample_text = String::new();
         	let sample_file_result = File::open("sample.json");
     
 
@@ -141,34 +141,34 @@ unsafe fn QueryNotice(r : Record)
     		// sample_file when it successfully acquired and checked with print, printed "OK(21694)". So it was an OK with the amount of bytes. Actually the exact size in bytes of the sample.json file
     		// LL: I had to borrow the stupid file as a mutable in order to read the mutable string?
         	let sample_file = match sample_file_result {
-            		Ok(mut file) => file.read_to_string(&mut data_sample),
+            		Ok(mut file) => file.read_to_string(&mut data_sample_text),
             		Err(error) => panic!("Error opening sample.json: {error:?}"),
         };
     
         // read the whole file
-        //sample_file_result.expect("Error: Reading the sample.json file").read_to_end(&mut data_sample);
-        println!("Read complete");
-        println!("file contents \t {:?}",sample_file)
-		//data, err = io.ReadAll(file)
-        //        fmt.Printf("Data JSON read:", string(data))
+        println!("Data JSON read:\t {:?}",data_sample_text)
 
 	}
 
 	// Check length of bytes here.
 	// Check number of records
 	// Return nil + send email as response length mayve changed
-	/*time.Sleep(time.Duration(rand.Intn(4)) * time.Second) */
+	{
+		use std::thread::sleep;
+		use std::time::Duration;
+		std::thread::sleep(Duration::new(3, 6));
+	}
 
-	/*message := SearchJSONResponse(data)
+	let message = SearchJSONResponse(data)
 	if message != nil {
 		SendMail(message, r.Email)
-	} */
+	} 
 
 	return
 
 }
 
-fn SearchJSONResponse()
+fn SearchJSONResponse() -> Result<Ok, Err>
 {
 
 }
