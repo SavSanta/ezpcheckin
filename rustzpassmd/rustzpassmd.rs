@@ -8,7 +8,6 @@ use std::path::Path;
 use base64::prelude::*;
 use reqwest;
 //use lettre;
-use rand;       //random library support
 use serde_json; // Dunno why this even exists opposed to regular serde
 use serde::{Serialize,Deserialize};
 
