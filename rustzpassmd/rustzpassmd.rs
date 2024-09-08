@@ -18,6 +18,7 @@ const QueryAPI : &'static str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9
 static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
+type FileOpenResult<T> = std::result::Result<T, std::io::Error>;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Record {
