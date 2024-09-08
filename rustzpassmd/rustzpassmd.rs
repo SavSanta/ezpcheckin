@@ -18,6 +18,7 @@ const QueryAPI : &'static str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9
 static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
+
 #[derive(Serialize, Deserialize, Debug)]
 struct Record {
 
@@ -99,8 +100,8 @@ unsafe fn QueryNotice(r : Record)
         json_resp_data = match resp_Result {
             Ok(ref Response) => {  
                   
-                if resp_Result.as_ref().expect("Status Code Error").status().as_u16() > 299 {
-                    // local 'err' created as 'err' is nil as we do get a Valid Bad Response if it reaches here and will segfault
+                if resp_Result.as_ref().expect("Error retrieving an HTTP Status Number.").status().as_u16() > 299 {
+                    // Will need to convert this to a try! or Err(invariant) match block.
                     println!("Response had a StatusCode: {}\n Body: <not in code due to bug>\n\n", resp_Result.as_ref().unwrap().status().as_str() /*, resp_Result.unwrap().text()*/);
                     //log.Println(err.Error())
                     //SendErrorMail(err.Error(), r.Email)
