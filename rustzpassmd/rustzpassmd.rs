@@ -1,4 +1,3 @@
-
 #![allow(unused)]
 
 use std::env;
@@ -10,8 +9,9 @@ use base64::prelude::*;
 use reqwest;
 use rand::Rng;
 //use lettre;
-use serde_json; // Dunno why this even exists opposed to regular serde
-use serde::{Serialize,Deserialize};
+//use serde_json; // Dunno why this even exists opposed to regular serde
+//use serde::{Serialize,Deserialize//};
+use gjson;
 
 //const Queryv1API : &str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw==";
 const QueryAPI : &'static str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGVuZGluZ1BheW1lbnRzVG90YWwv";
@@ -156,19 +156,43 @@ unsafe fn QueryNotice(r : Record)
 
 
 	let message = SearchJSONResponse(json_resp_data);
-/*	if message != nil {
-		SendMail(message, r.Email)
-	} 
-*/
+
+    match message 
+    {
+         Some(msg) => SendMail(msg).unwrap(),
+         None => println!("No matches found in SearchJSON."),
+    }
+	
 	return
 
 }
 
-fn SearchJSONResponse()
+fn SearchJSONResponse(json_resp_data : String) -> Option<String>
 {
 
-   
+    let entries = gjson::get(&read_data, "#.itemDescription");
+    let total_amt = gjson::get(&read_data, "#.formattedTotal");
+    let last = entries.array().len() - 1;
 
+    // Test sample.json Output
+    //["Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Total Amount Due"] 
+    //["$6.00","$6.00","$6.00","$6.00","$6.00","$6.00","$12.00","$48.00"]
+
+    // Different from python and go implementations which check explicitly against -1 for out-of-bounds but this check is essentially the same sine less-thangrather-than arent inclusive.
+    if last > 0
+	{
+        let fstring = format!("The {} is {} from {} tolls", entries.array()[last-1], total_amt.array()[last-1], last);
+
+        // Add support for "-nomail" flag to print to standard output
+        //println!(msg);
+	    Some(fstring)
+	}
+    else 
+	{
+	    //println!("No matches found in JSON.");
+	    None
+
+	}
 
 }
 
@@ -186,5 +210,4 @@ fn SendErrorMail()
 {
 
 }
-
 
