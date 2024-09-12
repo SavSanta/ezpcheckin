@@ -160,7 +160,7 @@ unsafe fn QueryNotice(r : Record)
 
     match message 
     {
-         Some(msg) => SendMail(msg.unwrap()),
+         Some(msg) => SendMail(msg),
          None => println!("No matches found in SearchJSON."),
     }
 	
