@@ -8,6 +8,7 @@ use std::path::Path;
 use base64::prelude::*;
 use reqwest;
 use rand::Rng;
+
 //use lettre;
 //use serde_json; // Dunno why this even exists opposed to regular serde
 //use serde::{Serialize,Deserialize//};
@@ -22,7 +23,7 @@ static mut NoMail: bool = false;
 
 type MessageResult = std::result::Result<String, std::io::Error>;
 
-#[derive(Serialize, Deserialize, Debug)]
+//#[derive(Serialize, Deserialize, Debug)]
 struct Record {
 
     Type: String,
