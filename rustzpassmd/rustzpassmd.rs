@@ -8,6 +8,7 @@ use std::path::Path;
 use base64::prelude::*;
 use reqwest;
 use rand::Rng;
+use mail_send;
 
 //use lettre;
 //use serde_json; // Dunno why this even exists opposed to regular serde
