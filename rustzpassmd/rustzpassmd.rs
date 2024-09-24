@@ -8,7 +8,9 @@ use std::path::Path;
 use base64::prelude::*;
 use reqwest;
 use rand::Rng;
-use mail_send;
+use mail_send::*;
+use crate::mail_builder::MessageBuilder;
+use tokio;
 
 //use lettre;
 //use serde_json; // Dunno why this even exists opposed to regular serde
@@ -161,9 +163,12 @@ unsafe fn QueryNotice(r : Record)
 
     match message 
     {
-         Some(msg) => SendMail(msg),
+         Some(msg) => tokio::runtime::Runtime::new()
+                      .unwrap()
+                      .block_on( SendMail(msg, r.Email) ); ,
          None => println!("No matches found in SearchJSON."),
     }
+
 	
 	return
 
@@ -203,31 +208,33 @@ fn MakePayment()
 
 }
 
-fn SendMail(msgdata : String, emailto :Vec<String>)
+async fn SendMail(msgdata : String, emailto : Vec<(&str, &str)>)
 {
 
+todo!("This program prob wont compile because we are expecting at Vec<&str,&str>).\n Need to fix this BS because Rust is super annoying");
     // Build a simple multipart message
     let message = MessageBuilder::new()
         .from(("Banana Rama", "banana@example.net"))
         .to(
             emailto
           )
-        .subject("Tolls Alert!")
+        .subject("Rusty Tolls Alert!")
         //.html_body("<h1>Hello, world!</h1>")
         .text_body(msgdata);
 
     // Connect to the SMTP submissions port, upgrade to TLS and
     // authenticate using the provided credentials.
     SmtpClientBuilder::new("127.0.0.1", 25)
-        //.implicit_tls(false)
-        //.credentials(("john", "p4ssw0rd"))
-        .connect()
+        .implicit_tls(false)
+        .connect_plain()
         .await
         .unwrap()
         .send(message)
         .await
         .unwrap();
 
+
+     println!("Email dispatched to rcpts");
 
 }
 
