@@ -15,6 +15,7 @@ reqwest = { version = "0.12.4", features = ["blocking", "json"] }
 #lettre = "0.11.7"
 gjson = "0.8"
 mail-send = "0.4.9"
+tokio = "1"
 
 [[bin]]
 name = "rustzpassmd"
