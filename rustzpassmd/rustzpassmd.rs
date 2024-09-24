@@ -161,11 +161,14 @@ unsafe fn QueryNotice(r : Record)
 
 	let message = SearchJSONResponse(json_resp_data);
 
+todo!("Fix the passing of Vec<&str, &str>.\n Apparently MessageBuilder can accept straight vecs that are straight up Vecs that impl Into<Address<'x>> types. \nRef: https://docs.rs/mail-builder/0.3.1/mail_builder/struct.MessageBuilder.html#method.write_to.");
+todo!("Fix is on expected `Vec<(&str, &str)>`, found `Vec<(Vec<String>, Vec<String>)>` ---> To many effin Vecs");
+    let testvec = vec![(r.Email, r.Email)];
     match message 
     {
          Some(msg) => tokio::runtime::Runtime::new()
                          .unwrap()
-                         .block_on( SendMail(msg, r.Email) ); ,
+                         .block_on( SendMail(msg, testvec) ) ,
                          
          None => println!("No matches found in SearchJSON."),
     }
@@ -212,7 +215,7 @@ fn MakePayment()
 async fn SendMail(msgdata : String, emailto : Vec<(&str, &str)>)
 {
 
-todo!("This program prob wont compile because we are expecting at Vec<&str,&str>).\n Need to fix this BS because Rust is super annoying");
+
     // Build a simple multipart message
     let message = MessageBuilder::new()
         .from(("Banana Rama", "banana@example.net"))
