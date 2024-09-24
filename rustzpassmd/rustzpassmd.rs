@@ -203,9 +203,30 @@ fn MakePayment()
 
 }
 
-fn SendMail(msgdata : String)
+fn SendMail(msgdata : String, emailto :Vec<String>)
 {
 
+    // Build a simple multipart message
+    let message = MessageBuilder::new()
+        .from(("Banana Rama", "banana@example.net"))
+        .to(
+            emailto
+          )
+        .subject("Tolls Alert!")
+        //.html_body("<h1>Hello, world!</h1>")
+        .text_body(msgdata);
+
+    // Connect to the SMTP submissions port, upgrade to TLS and
+    // authenticate using the provided credentials.
+    SmtpClientBuilder::new("127.0.0.1", 25)
+        //.implicit_tls(false)
+        //.credentials(("john", "p4ssw0rd"))
+        .connect()
+        .await
+        .unwrap()
+        .send(message)
+        .await
+        .unwrap();
 
 
 }
