@@ -164,8 +164,9 @@ unsafe fn QueryNotice(r : Record)
     match message 
     {
          Some(msg) => tokio::runtime::Runtime::new()
-                      .unwrap()
-                      .block_on( SendMail(msg, r.Email) ); ,
+                         .unwrap()
+                         .block_on( SendMail(msg, r.Email) ); ,
+                         
          None => println!("No matches found in SearchJSON."),
     }
 
