@@ -24,7 +24,6 @@ const QueryAPI : &'static str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9
 static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
-
 type MessageResult = std::result::Result<String, std::io::Error>;
 
 //#[derive(Serialize, Deserialize, Debug)]
@@ -46,7 +45,7 @@ fn main() {
         let args: Vec<String> = env::args().collect();
         TestDebug = args.contains(&String::from("-testdebug"));
         NoMail = args.contains(&String::from("-nomail"));
-        println!("The tesdebug values is {}", TestDebug);
+        println!("The TestDebug value is {}.\nNoMail value is {}.", TestDebug), NoMail;
     }
 
 
@@ -118,8 +117,6 @@ unsafe fn QueryNotice(r : Record)
                 else {
                     println!("Response data seem to be successful");
                     resp_Result.unwrap().text();
-                    String::from("Hi Test")
-
                 }
 
             },
