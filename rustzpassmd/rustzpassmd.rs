@@ -213,7 +213,7 @@ fn MakePayment()
 /// Though, based on previous knowledge I realized struggling with unwrapping the Vec(&str, &str> or casting Vec<(Vec<String>, Vec<String>)> was not necessary.
 /// Here we simply use the Address type from https://docs.rs/mail-builder/0.3.1/mail_builder/struct.MessageBuilder.html#method.write_to to pass in either a convertible String, &str, or Vec. (hopefully)
 
-async fn SendMail(msgdata : String, emailto : impl for <'x>  Into<Address<'x>>)
+async fn SendMail(msgdata : String, emailto : impl for <'x> Into<Address<'x>>)
 {
 
 
