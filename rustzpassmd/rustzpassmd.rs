@@ -36,17 +36,14 @@ struct Record {
 }
 
 fn main() {
-
-    // See how I can make this static/global
     
     unsafe 
     {
         let args: Vec<String> = env::args().collect();
         TestDebug = args.contains(&String::from("-testdebug"));
         NoMail = args.contains(&String::from("-nomail"));
-        println!("The TestDebug value is {}.\nNoMail value is {}.", TestDebug), NoMail;
+        println!("The TestDebug value is {}.\nNoMail value is {}.", TestDebug, NoMail);
     }
-
 
     let rec = CreateRecordFromConfig(std::string::String::from("LIC || 7EH7532 || MD || 77040 || firkille@@hotbot.net"));
     unsafe 
@@ -191,7 +188,7 @@ fn SearchJSONResponse(json_resp_data : String) -> Option<String>
         let fstring = format!("The {} is {} from {} tolls", entries.array()[last-1], total_amt.array()[last-1], last);
 
         //TODO: Add support for "-nomail" flag to print to standard output. 
-        println!(fstring);
+        println!("{}", fstring);
         Some(fstring)
 	}
     else 
