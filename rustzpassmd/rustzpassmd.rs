@@ -187,7 +187,7 @@ fn SearchJSONResponse(json_resp_data : String) -> Option<String>
     //["Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Total Amount Due"] 
     //["$6.00","$6.00","$6.00","$6.00","$6.00","$6.00","$12.00","$48.00"]
 
-    // Different from python and go implementations which check explicitly against -1 for out-of-bounds but this check is essentially the same sine less-thangrather-than arent inclusive.
+    // Different from python and go implementations which check explicitly against -1 for out-of-bounds but this check is essentially the same since less-than/ge4ater-than arent inclusive.
     if last > 0
 	{
         let fstring = format!("The {} is {} from {} tolls", entries.array()[last-1], total_amt.array()[last-1], last);
