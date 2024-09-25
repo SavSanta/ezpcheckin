@@ -7,16 +7,14 @@ use std::io::prelude::*;
 use std::path::Path;
 use base64::prelude::*;
 use reqwest;
+use gjson;
+use tokio;
 use rand::Rng;
 use mail_send::*;
 use mail_builder::headers::address::Address;
 use crate::mail_builder::MessageBuilder;
-use tokio;
-
 //use lettre;
-//use serde_json; // Dunno why this even exists opposed to regular serde
-//use serde::{Serialize,Deserialize//};
-use gjson;
+
 
 //const Queryv1API : &str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGF5bWVudC9QZW5kaW5nLw==";
 const QueryAPI : &'static str = "aHR0cHM6Ly9jc2MuZHJpdmVlem1kLmNvbS9hcGkvUGF5VG9sbHMvUGVuZGluZ1BheW1lbnRzVG90YWwv";
@@ -41,7 +39,8 @@ fn main() {
 
     // See how I can make this static/global
     
-    unsafe {
+    unsafe 
+    {
         let args: Vec<String> = env::args().collect();
         TestDebug = args.contains(&String::from("-testdebug"));
         NoMail = args.contains(&String::from("-nomail"));
@@ -49,9 +48,11 @@ fn main() {
     }
 
 
-    //let rec = CreateRecordFromConfig(std::string::String::new());
     let rec = CreateRecordFromConfig(std::string::String::from("LIC || 7EH7532 || MD || 77040 || firkille@@hotbot.net"));
-    unsafe { QueryNotice(rec) };
+    unsafe 
+    { 
+        QueryNotice(rec)
+    };
 
 }
 
@@ -102,7 +103,7 @@ unsafe fn QueryNotice(r : Record)
     // If we're not in TestDebug mode then dont look for a sample.json file
     if TestDebug == false {
         // Should be a Result<reqwest:Response> type
-    let resp_Result = reqwest::blocking::get(QueryURL);//.expect("FAILURE TO REACH BASEURL").text();
+        let resp_Result = reqwest::blocking::get(QueryURL);//.expect("FAILURE TO REACH BASEURL").text();
 
         json_resp_data = match resp_Result {
             Ok(ref Response) => {  
@@ -128,9 +129,9 @@ unsafe fn QueryNotice(r : Record)
 
 	} else {
 
-		println!("Utilizing local sample.json file");
+            println!("Utilizing local sample.json file");
 
-		// Read in sample.json since no current tolls exist
+            // Read in sample.json since no current tolls exist
         	let sample_file_result = File::open("sample.json");
 
     		// I still dont understand this dumb match pattern and how each passes to the other
@@ -140,10 +141,10 @@ unsafe fn QueryNotice(r : Record)
         	        // read the whole file or error out
             		Ok(mut file) => file.read_to_string(&mut json_resp_data),
             		Err(error) => panic!("Error opening sample.json: {error:?}"),
-        };
+            };
     
-        // print the sample data to stdout
-        println!("Data JSON read:\t {:?}",json_resp_data)
+            // print the sample data to stdout
+            println!("Data JSON read:\t {:?}",json_resp_data)
 
 	}
 
