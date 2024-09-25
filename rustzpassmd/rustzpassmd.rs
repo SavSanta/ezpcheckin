@@ -125,7 +125,7 @@ unsafe fn QueryNotice(r : Record)
             },
             Err(error) => { 
                 //SendErrorMail(err.Error(), r.Email)
-                panic!("Problem making the request: {error:?}");
+                panic!("Problem making the reqwest: {error:?}");
             },
         };
 
