@@ -115,6 +115,7 @@ unsafe fn QueryNotice(r : Record)
                 else {
                     println!("Response data seem to be successful");
                     resp_Result.unwrap().text();
+                    String::from("This is STUB TEXT. BECAUSE IF REMOVED CAUSES COMPILATION ERROR of: 'expected `String`, found `()`'")
                 }
 
             },
