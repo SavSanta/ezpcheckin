@@ -162,9 +162,6 @@ unsafe fn QueryNotice(r : Record)
 
 	let message = SearchJSONResponse(json_resp_data);
 
-todo!("Fix the passing of Vec<&str, &str>.\n Apparently MessageBuilder can accept straight vecs that are straight up Vecs that impl Into<Address<'x>> types. \nRef: https://docs.rs/mail-builder/0.3.1/mail_builder/struct.MessageBuilder.html#method.write_to.");
-todo!("Fix is on expected `Vec<(&str, &str)>`, found `Vec<(Vec<String>, Vec<String>)>` ---> To many effin Vecs");
-    let testvec = vec![(r.Email, r.Email)];
     match message 
     {
          Some(msg) => tokio::runtime::Runtime::new()
@@ -212,6 +209,11 @@ fn MakePayment()
 {
 
 }
+
+
+/// Need to strengthen my understanding of lifetime annotations here. 
+/// Though, based on previous knowledge I realized struggling with unwrapping the Vec(&str, &str> or casting Vec<(Vec<String>, Vec<String>)> was not necessary.
+/// Here we simply use the Address type from https://docs.rs/mail-builder/0.3.1/mail_builder/struct.MessageBuilder.html#method.write_to to pass in either a convertible String, &str, or Vec. (hopefully)
 
 async fn SendMail(msgdata : String, emailto : impl for <'x>  Into<Address<'x>>)
 {
