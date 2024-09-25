@@ -215,7 +215,6 @@ fn MakePayment()
 async fn SendMail(msgdata : String, emailto : impl for <'x> Into<Address<'x>>)
 {
 
-
     // Build a simple multipart message
     let message = MessageBuilder::new()
         .from(("Banana Rama", "banana@example.net"))
@@ -236,7 +235,6 @@ async fn SendMail(msgdata : String, emailto : impl for <'x> Into<Address<'x>>)
         .send(message)
         .await
         .unwrap();
-
 
      println!("Email dispatched to rcpts");
 
