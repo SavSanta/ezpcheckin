@@ -9,6 +9,7 @@ use base64::prelude::*;
 use reqwest;
 use rand::Rng;
 use mail_send::*;
+use mail_builder::headers::address::Address;
 use crate::mail_builder::MessageBuilder;
 use tokio;
 
@@ -168,7 +169,7 @@ todo!("Fix is on expected `Vec<(&str, &str)>`, found `Vec<(Vec<String>, Vec<Stri
     {
          Some(msg) => tokio::runtime::Runtime::new()
                          .unwrap()
-                         .block_on( SendMail(msg, testvec) ) ,
+                         .block_on( SendMail(msg, r.Email) ) ,
                          
          None => println!("No matches found in SearchJSON."),
     }
@@ -212,7 +213,7 @@ fn MakePayment()
 
 }
 
-async fn SendMail(msgdata : String, emailto : Vec<(&str, &str)>)
+async fn SendMail(msgdata : String, emailto : impl for <'x>  Into<Address<'x>>)
 {
 
 
