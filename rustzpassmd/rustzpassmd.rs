@@ -190,15 +190,14 @@ fn SearchJSONResponse(json_resp_data : String) -> Option<String>
 	{
         let fstring = format!("The {} is {} from {} tolls", entries.array()[last-1], total_amt.array()[last-1], last);
 
-        // Add support for "-nomail" flag to print to standard output
-        //println!(msg);
-	    Some(fstring)
+        //TODO: Add support for "-nomail" flag to print to standard output. 
+        println!(fstring);
+        Some(fstring)
 	}
     else 
 	{
-	    //println!("No matches found in JSON.");
+	    // Return Option(None). The failure message is printed in the calling function match braces.
 	    None
-
 	}
 
 }
