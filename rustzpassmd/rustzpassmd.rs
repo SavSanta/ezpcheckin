@@ -178,19 +178,25 @@ unsafe fn QueryNotice(r : Record)
 fn SearchJSONResponse(json_resp_data : String) -> Option<String>
 {
 
-    let entries = gjson::get(&json_resp_data, "#.itemDescription");
-    let total_amt = gjson::get(&json_resp_data, "#.formattedTotal");
-    let last = entries.array().len() - 1;
+    let entries = gjson::get(&read_data, "#.itemDescription");
+    let total_amt = gjson::get(&read_data, "#.formattedTotal");
+    let num_entries = entries.array().len();
 
     // Test sample.json Output
     //["Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Invoiced Toll Transaction","Total Amount Due"] 
     //["$6.00","$6.00","$6.00","$6.00","$6.00","$6.00","$12.00","$48.00"]
 
-    // Different from python and go implementations which check explicitly against -1 for out-of-bounds but this check is essentially the same since less-than/greater-than arent inclusive.
-    if last > 0
+    // Different from python and go implementations which use some form of last/last-1 for bounds check. 
+    // This proves difficult here because Rust requires a usize type for indexing but usize is unsigned and needs to be mangled into a isize.
+    // Much easier to discover that modifying it using built-in method of Last() on array got us the same and stopped fatal panics.
+    if num_entries > 0
 	{
-        let fstring = format!("The {} is {} from {} tolls", entries.array()[last-1], total_amt.array()[last-1], last);
 
+	    //println!("The entries value total of {:#?}", last);
+	    //println!("The entries value as dictated from isize last is {:#?}", ilast);
+	    //println!("The data had SOME entries pp {} \n and totals {}", entries, total_amt);
+
+        let fstring = format!("The {} is {} from {} tolls", entries.array().last().unwrap(),   total_amt.array().last().unwrap(), num_entries);
         //TODO: Add support for "-nomail" flag to print to standard output. 
         println!("{}", fstring);
         Some(fstring)
