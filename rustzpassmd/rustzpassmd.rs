@@ -178,8 +178,8 @@ unsafe fn QueryNotice(r : Record)
 fn SearchJSONResponse(json_resp_data : String) -> Option<String>
 {
 
-    let entries = gjson::get(&read_data, "#.itemDescription");
-    let total_amt = gjson::get(&read_data, "#.formattedTotal");
+    let entries = gjson::get(&json_resp_data, "#.itemDescription");
+    let total_amt = gjson::get(&json_resp_data, "#.formattedTotal");
     let num_entries = entries.array().len();
 
     // Test sample.json Output
