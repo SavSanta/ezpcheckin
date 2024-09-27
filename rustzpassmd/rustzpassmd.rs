@@ -79,7 +79,7 @@ fn CreateRecordFromConfig(cfgdata : String) -> Record
 unsafe fn QueryNotice(r : Record)
 {
 
-    // Currently built only to to use the License plate + zip
+    // Currently built only to to use the License plate + Zip
     let baseURL = String::from_utf8(BASE64_STANDARD.decode(QueryAPI).unwrap()).unwrap();
 
     if TestDebug == true 
@@ -114,7 +114,10 @@ unsafe fn QueryNotice(r : Record)
                 }
                 else {
                     println!("Response data seem to be successful");
-                    resp_Result.unwrap().text();
+                    //println!("-- {} ", resp_Result.as_ref().unwrap().text().unwrap());
+                    let k = resp_Result.unwrap();
+                    println!("-- {:?} ", k.text());
+                    //resp_Result.unwrap().text().unwrap()
                     String::from("This is STUB TEXT. BECAUSE IF REMOVED CAUSES COMPILATION ERROR of: 'expected `String`, found `()`'")
                 }
 
