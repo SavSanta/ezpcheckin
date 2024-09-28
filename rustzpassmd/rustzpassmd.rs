@@ -4,6 +4,7 @@ use std::env;
 use std::fmt;
 use std::fs::File;
 use std::io::prelude::*;
+use std::io::{BufReader, Error};
 use std::path::Path;
 use base64::prelude::*;
 use reqwest;
@@ -23,6 +24,7 @@ static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
 type MessageResult = std::result::Result<String, std::io::Error>;
+type FileOpenResult = std::result::Result<File, std::io::Error>;
 
 //#[derive(Serialize, Deserialize, Debug)]
 struct Record {
@@ -45,11 +47,34 @@ fn main() {
         println!("The TestDebug value is {}.\nNoMail value is {}.", TestDebug, NoMail);
     }
 
-    let rec = CreateRecordFromConfig(std::string::String::from("LIC || 7EH7532 || MD || 77040 || firkille@@hotbot.net"));
+    let mut recs : Vec<Record> = vec![];
+    let file: FileOpenResult = File::open("ezpstore.txt");
+    match file {
+        Ok(file) => {
+
+            let buffered = BufReader::new(file);
+            
+            for line in buffered
+                         .lines()
+                         .filter(|x| !x.as_ref().unwrap().trim().is_empty())
+                         .filter(|x| !x.as_ref().unwrap().trim().starts_with(&['#'])) 
+            {
+                println!("{:?}", line);
+                let rec_from_line = CreateRecordFromConfig(line.unwrap());
+                recs.push(rec_from_line);
+            }
+        }
+        Err(err) => {
+            println!("The ezpstore.txt file could not be opened: {err}");
+        }
+    }
+    
+    for rec in recs {
     unsafe 
     { 
         QueryNotice(rec)
     };
+}
 
 }
 
@@ -72,7 +97,7 @@ fn CreateRecordFromConfig(cfgdata : String) -> Record
     }
 
     Record{Type: chunks[0].to_string(), Data: chunks[1].to_string(), State: chunks[2].to_string(), Zipcode: chunks[3].to_string(), Email: chunks[4].split(",").map(|v| v.to_string()).collect::<Vec<_>>()}
-
+  
 
 }
 
