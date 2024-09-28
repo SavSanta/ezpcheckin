@@ -146,7 +146,7 @@ unsafe fn QueryNotice(r : Record)
             };
     
             // print the sample data to stdout
-            println!("Data JSON read:\t {:?}",json_resp_data)
+            println!("Sample data JSON read:\t {:?}",json_resp_data)
 
 	}
 
