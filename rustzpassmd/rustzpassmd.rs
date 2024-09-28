@@ -116,9 +116,10 @@ unsafe fn QueryNotice(r : Record)
                     println!("Response data seem to be successful");
                     //println!("-- {} ", resp_Result.as_ref().unwrap().text().unwrap());
                     let k = resp_Result.unwrap();
-                    println!("-- {:?} ", k.text());
+                    //println!("-- {:?} ", k.text());     // Causes error:  - move occurs because `k` has type `reqwest::blocking::Response`, which does not implement the `Copy` trait. Research how to borrow or force some sort of deep copy.
+                    k.text().unwrap()
                     //resp_Result.unwrap().text().unwrap()
-                    String::from("This is STUB TEXT. BECAUSE IF REMOVED CAUSES COMPILATION ERROR of: 'expected `String`, found `()`'")
+                    //String::from("This is STUB TEXT. BECAUSE IF REMOVED CAUSES COMPILATION ERROR of: 'expected `String`, found `()`'")
                 }
 
             },
