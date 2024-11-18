@@ -6,6 +6,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 use base64::prelude::*;
+use std::io::{BufReader, Error};
 use reqwest;
 use gjson;
 use tokio;
@@ -23,6 +24,7 @@ static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
 type MessageResult = std::result::Result<String, std::io::Error>;
+type FileOpenResult = std::result::Result<File, std::io::Error>;
 
 //#[derive(Serialize, Deserialize, Debug)]
 struct Record {
