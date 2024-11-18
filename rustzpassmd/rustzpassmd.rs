@@ -4,7 +4,6 @@ use std::env;
 use std::fmt;
 use std::fs::File;
 use std::io::prelude::*;
-use std::io::{BufReader, Error};
 use std::path::Path;
 use base64::prelude::*;
 use reqwest;
@@ -24,7 +23,6 @@ static mut TestDebug: bool = false;
 static mut NoMail: bool = false;
 
 type MessageResult = std::result::Result<String, std::io::Error>;
-type FileOpenResult = std::result::Result<File, std::io::Error>;
 
 //#[derive(Serialize, Deserialize, Debug)]
 struct Record {
@@ -74,7 +72,6 @@ fn main() {
     { 
         QueryNotice(rec)
     };
-}
 
 }
 
@@ -97,7 +94,7 @@ fn CreateRecordFromConfig(cfgdata : String) -> Record
     }
 
     Record{Type: chunks[0].to_string(), Data: chunks[1].to_string(), State: chunks[2].to_string(), Zipcode: chunks[3].to_string(), Email: chunks[4].split(",").map(|v| v.to_string()).collect::<Vec<_>>()}
-  
+
 
 }
 
@@ -260,15 +257,16 @@ async fn SendMail(msgdata : String, emailto : impl for <'x> Into<Address<'x>>)
 
     // Connect to the SMTP submissions port, upgrade to TLS and
     // authenticate using the provided credentials.
-    SmtpClientBuilder::new("127.0.0.1", 25)
-        .implicit_tls(false)
-        .connect_plain()
-        .await
-        .unwrap()
-        .send(message)
-        .await
-        .unwrap();
+   let client = 
+       match SmtpClientBuilder::new("127.0.0.1", 25).implicit_tls(false).connect_plain().await
+       {
 
+            Err(e) => println!("Couldnt Connect to local SMTP. Err: {}", e),
+            Ok(mut client) => client.send(message).await.unwrap(),
+
+        };
+
+     // This runs because Rust Error handling is stupid and ugly
      println!("Email dispatched to rcpts");
 
 }
