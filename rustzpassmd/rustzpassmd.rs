@@ -67,11 +67,10 @@ fn main() {
         }
     }
     
-    for rec in recs {
-    unsafe 
-    { 
-        QueryNotice(rec)
-    };
+    for rec in recs
+    {
+        unsafe { QueryNotice(rec) };
+    }
 
 }
 
