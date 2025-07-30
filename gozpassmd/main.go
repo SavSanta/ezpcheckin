@@ -5,6 +5,7 @@
 
  Slightly smaller binary: go build -ldflags="-w -s"
  Even more small binary: upx -k --brute gozpassmd
+ Even more smsller binaried by uding go get garblr to reduce 15% thru Type snd Metsdata deletion. however will glsg ss mslicioud modt likely due to lazy AV engines on Windows
 */
 
 package main
